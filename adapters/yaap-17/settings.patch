@@ -1,0 +1,258 @@
+diff --git a/res/values/yaap_strings.xml b/res/values/yaap_strings.xml
+index 7908e9f..4c66035 100644
+--- a/res/values/yaap_strings.xml
++++ b/res/values/yaap_strings.xml
+@@ -553,7 +553,19 @@
+     <string name="heads_up_off">Heads up is disabled globally</string>
+
+     <!-- Brightness slider -->
++    <string name="berry_black_theme_title">Pure black</string>
++    <string name="berry_black_theme_summary">Use pure-black backgrounds in dark theme</string>
++    <string name="qs_brightness_slider_round_title">Rounded brightness slider</string>
+     <string name="qs_show_brightness_title">Brightness slider</string>
++    <string name="qs_brightness_visibility_title">Show brightness bar</string>
++    <string-array name="qs_brightness_visibility_entries">
++        <item>Always</item>
++        <item>Quick Settings only</item>
++    </string-array>
++    <string-array name="qs_brightness_visibility_values" translatable="false">
++        <item>2</item>
++        <item>1</item>
++    </string-array>
+     <string name="qs_show_brightness_summary">Brightness slider visibility and settings</string>
+     <string name="qs_brightness_position_bottom_title">Bottom brightness slider</string>
+     <string name="qs_brightness_position_bottom_summary">Show the brightness slider on the bottom of QS</string>
+diff --git a/res/xml/dark_mode_settings.xml b/res/xml/dark_mode_settings.xml
+index e2f696e..f3dce8b 100644
+--- a/res/xml/dark_mode_settings.xml
++++ b/res/xml/dark_mode_settings.xml
+@@ -52,6 +52,12 @@
+             settings:searchable="true"/>
+     </PreferenceCategory>
+
++    <com.yasp.settings.preferences.SecureSettingSwitchPreference
++        android:key="berry_black_theme"
++        android:title="@string/berry_black_theme_title"
++        android:summary="@string/berry_black_theme_summary"
++        android:defaultValue="false" />
++
+     <PreferenceCategory
+         android:key="display_category"
+         android:title="@string/dark_theme_timing_category">
+diff --git a/res/xml/display_settings.xml b/res/xml/display_settings.xml
+index db47a74..a19a237 100644
+--- a/res/xml/display_settings.xml
++++ b/res/xml/display_settings.xml
+@@ -196,11 +196,11 @@
+             android:summary="@string/display_white_balance_summary"
+             settings:controller="com.android.settings.display.DisplayWhiteBalancePreferenceController"/>
+
+-        <SwitchPreferenceCompat
++        <ListPreference
+             android:key="peak_refresh_rate"
+-            android:title="@string/peak_refresh_rate_title"
+-            android:summary="@string/peak_refresh_rate_summary"
+-            settings:controller="com.android.settings.display.PeakRefreshRatePreferenceController"/>
++            android:title="@string/refresh_rate_selector_title"
++            android:persistent="false"
++            settings:controller="com.android.settings.display.RefreshRatePreferenceController"/>
+
+         <SwitchPreferenceCompat
+             android:key="disable_vrr"
+diff --git a/res/xml/yaap_settings_brightness_slider.xml b/res/xml/yaap_settings_brightness_slider.xml
+index 7a85218..a3cc707 100644
+--- a/res/xml/yaap_settings_brightness_slider.xml
++++ b/res/xml/yaap_settings_brightness_slider.xml
+@@ -19,6 +19,19 @@
+         android:key="qs_show_brightness"
+         android:title="@string/qs_show_brightness_title" />
+
++    <ListPreference
++        android:key="qs_brightness_visibility"
++        android:title="@string/qs_brightness_visibility_title"
++        android:summary="%s"
++        android:entries="@array/qs_brightness_visibility_entries"
++        android:entryValues="@array/qs_brightness_visibility_values"
++        android:defaultValue="1" />
++
++    <com.yasp.settings.preferences.SystemSettingSwitchPreference
++        android:key="qs_brightness_slider_round"
++        android:title="@string/qs_brightness_slider_round_title"
++        android:defaultValue="false" />
++
+     <com.yasp.settings.preferences.SecureSettingSwitchPreference
+         android:key="qs_brightness_position_bottom"
+         android:title="@string/qs_brightness_position_bottom_title"
+diff --git a/res/xml/yaap_settings_quicksettings.xml b/res/xml/yaap_settings_quicksettings.xml
+index e8d3699..dd19bca 100644
+--- a/res/xml/yaap_settings_quicksettings.xml
++++ b/res/xml/yaap_settings_quicksettings.xml
+@@ -18,9 +18,16 @@
+     android:title="@string/quicksettings_title"
+     xmlns:settings="http://schemas.android.com/apk/res/com.android.settings">
+
++    <Preference
++        android:key="circular_qs_settings"
++        android:title="@string/qs_tiles_circular_title"
++        android:summary="@string/qs_tiles_circular_settings_summary"
++        android:fragment="com.android.settings.system.CircularQsSettings" />
++
+     <!-- QS brightness slider -->
+     <com.yasp.settings.preferences.SecureSettingMasterSwitchPreference
+         android:key="qs_show_brightness"
++        android:persistent="false"
+         android:title="@string/qs_show_brightness_title"
+         android:summary="@string/qs_show_brightness_summary"
+         android:fragment="com.android.settings.system.BrightnessSliderSettings"
+diff --git a/res/xml/yaap_settings_statusbar.xml b/res/xml/yaap_settings_statusbar.xml
+index 76889bd..b380b20 100644
+--- a/res/xml/yaap_settings_statusbar.xml
++++ b/res/xml/yaap_settings_statusbar.xml
+@@ -18,6 +18,12 @@
+     android:title="@string/statusbar_title"
+     xmlns:settings="http://schemas.android.com/apk/res/com.android.settings">
+
++    <Preference
++        android:key="lunaris_bar_settings"
++        android:title="@string/lunaris_bar_title"
++        android:summary="@string/lunaris_bar_customize"
++        android:fragment="com.android.settings.system.DynamicIslandSettings" />
++
+     <!-- Network Traffic Monitor -->
+     <com.yasp.settings.preferences.SystemSettingMasterSwitchPreference
+         android:key="network_traffic_state"
+diff --git a/src/com/android/settings/core/gateway/SettingsGateway.java b/src/com/android/settings/core/gateway/SettingsGateway.java
+index b3678b9..c97ff1b 100644
+--- a/src/com/android/settings/core/gateway/SettingsGateway.java
++++ b/src/com/android/settings/core/gateway/SettingsGateway.java
+@@ -208,6 +208,10 @@ import com.android.settings.sound.VolumeSteps;
+ import com.android.settings.supervision.SupervisionDashboardFragment;
+ import com.android.settings.support.SupportDashboardActivity;
+ import com.android.settings.system.ResetDashboardFragment;
++import com.android.settings.system.CircularQsSettings;
++import com.android.settings.system.DynamicIslandSettings;
++import com.android.settings.system.LunarisBarCardsSettings;
++import com.android.settings.system.LunarisBarCardSettings;
+ import com.android.settings.system.ShadePanelsFragment;
+ import com.android.settings.system.SystemDashboardFragment;
+ import com.android.settings.tts.TextToSpeechSettings;
+@@ -263,6 +267,10 @@ public class SettingsGateway {
+             UserDictionaryList.class.getName(),
+             UserDictionarySettings.class.getName(),
+             DisplaySettings.class.getName(),
++            CircularQsSettings.class.getName(),
++            DynamicIslandSettings.class.getName(),
++            LunarisBarCardsSettings.class.getName(),
++            LunarisBarCardSettings.class.getName(),
+             MyDeviceInfoFragment.class.getName(),
+             ModuleLicensesDashboard.class.getName(),
+             ManageApplications.class.getName(),
+diff --git a/src/com/android/settings/display/DisplayScreen.kt b/src/com/android/settings/display/DisplayScreen.kt
+index 9847182..267e7f3 100644
+--- a/src/com/android/settings/display/DisplayScreen.kt
++++ b/src/com/android/settings/display/DisplayScreen.kt
+@@ -108,7 +108,6 @@ open class DisplayScreen :
+                 R.string.category_name_display_controls,
+             ) order -150 +=
+                 {
+-                    +PeakRefreshRateSwitchPreference()
+                     if (Flags.catalystScreensaver()) +ScreensaverScreen.KEY
+                 }
+         }
+diff --git a/src/com/android/settings/display/darkmode/DarkModeScreen.kt b/src/com/android/settings/display/darkmode/DarkModeScreen.kt
+index 4339e88..95c54fa 100644
+--- a/src/com/android/settings/display/darkmode/DarkModeScreen.kt
++++ b/src/com/android/settings/display/darkmode/DarkModeScreen.kt
+@@ -113,6 +113,7 @@ abstract class BaseDarkModeScreen(context: Context, val isUiOnly: Boolean) :
+             +DarkModeTopIntroPreference()
+             +DarkModeMainSwitchPreference(darkModeStorage, isUiOnly)
+             +TwilightLocationPreference()
++            +PureBlackThemePreference()
+             if (android.view.accessibility.Flags.forceInvertColor()) {
+                 +PreferenceCategory(
+                     key = "dark_theme_group",
+diff --git a/src/com/android/settings/system/BrightnessSliderSettings.java b/src/com/android/settings/system/BrightnessSliderSettings.java
+index b3a864a..f71f0af 100644
+--- a/src/com/android/settings/system/BrightnessSliderSettings.java
++++ b/src/com/android/settings/system/BrightnessSliderSettings.java
+@@ -24,6 +24,7 @@ import android.widget.CompoundButton;
+ import android.widget.CompoundButton.OnCheckedChangeListener;
+
+ import androidx.preference.Preference;
++import androidx.preference.ListPreference;
+ import androidx.preference.PreferenceScreen;
+
+ import com.android.internal.logging.nano.MetricsProto;
+@@ -41,20 +42,26 @@ public class BrightnessSliderSettings extends DashboardFragment {
+     private static final String SLIDER_HAPTICS_KEY = "brightness_slider_haptics";
+
+     private MainSwitchPreference mMasterSwitch;
++    private ListPreference mVisibility;
+
+     @Override
+     public void onCreate(Bundle icicle) {
+         super.onCreate(icicle);
+
+         mMasterSwitch = findPreference(KEY_MASTER);
+-        boolean enabled = Settings.Secure.getInt(
+-                getContentResolver(), KEY_MASTER, 1) == 1;
++        int visibility = Settings.Secure.getInt(getContentResolver(), KEY_MASTER, 1);
++        boolean enabled = visibility != 0;
++        mVisibility = findPreference("qs_brightness_visibility");
++        if (enabled) mVisibility.setValue(Integer.toString(visibility));
++        mVisibility.setOnPreferenceChangeListener((preference, value) ->
++                Settings.Secure.putInt(getContentResolver(), KEY_MASTER,
++                        Integer.parseInt((String) value)));
+         mMasterSwitch.setChecked(enabled);
+         mMasterSwitch.addOnSwitchChangeListener(new OnCheckedChangeListener() {
+             @Override
+             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                 Settings.Secure.putInt(getContentResolver(),
+-                        KEY_MASTER, isChecked ? 1 : 0);
++                        KEY_MASTER, isChecked ? Integer.parseInt(mVisibility.getValue()) : 0);
+                 updateMasterEnablement(isChecked);
+             }
+         });
+@@ -68,7 +75,7 @@ public class BrightnessSliderSettings extends DashboardFragment {
+
+     private void updateMasterEnablement() {
+         final boolean enabled = Settings.Secure.getInt(
+-                getContentResolver(), KEY_MASTER, 1) == 1;
++                getContentResolver(), KEY_MASTER, 1) != 0;
+         updateMasterEnablement(enabled);
+     }
+
+diff --git a/src/com/android/settings/system/QuickSettings.java b/src/com/android/settings/system/QuickSettings.java
+index 49aa50c..dead18d 100644
+--- a/src/com/android/settings/system/QuickSettings.java
++++ b/src/com/android/settings/system/QuickSettings.java
+@@ -77,7 +77,7 @@ public class QuickSettings extends DashboardFragment implements
+                 findPreference(BRIGHTNESS_SLIDER);
+         mBrightnessSlider.setOnPreferenceChangeListener(this);
+         boolean enabled = Settings.Secure.getInt(resolver,
+-                BRIGHTNESS_SLIDER, 1) == 1;
++                BRIGHTNESS_SLIDER, 1) != 0;
+         mBrightnessSlider.setChecked(enabled);
+
+         // Get max_shade_window_blur_radius from SystemUI
+@@ -141,7 +141,7 @@ public class QuickSettings extends DashboardFragment implements
+         if (mBrightnessSlider == null) return;
+         final boolean enabled = Settings.Secure.getInt(
+                 getActivity().getContentResolver(),
+-                BRIGHTNESS_SLIDER, 1) == 1;
++                BRIGHTNESS_SLIDER, 1) != 0;
+         mBrightnessSlider.setChecked(enabled);
+     }
+
+@@ -161,8 +161,10 @@ public class QuickSettings extends DashboardFragment implements
+             return true;
+         } else if (preference == mBrightnessSlider) {
+             Boolean value = (Boolean) newValue;
++            String visibility = getPreferenceManager().getSharedPreferences()
++                    .getString("qs_brightness_visibility", "1");
+             Settings.Secure.putInt(resolver,
+-                    BRIGHTNESS_SLIDER, value ? 1 : 0);
++                    BRIGHTNESS_SLIDER, value ? ("2".equals(visibility) ? 2 : 1) : 0);
+             return true;
+         } else if (preference == mShadeBlurRadiusPref) {
+             int value = (Integer) newValue;

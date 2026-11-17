@@ -1,0 +1,1033 @@
+{
+  "format": 1,
+  "rom": "YAAP",
+  "android": 17,
+  "repositories": [
+    {
+      "path": "frameworks/base",
+      "baseline": "013b0e44d237de5be92071dc99171106b3027945",
+      "files": [
+        {
+          "source": "features/systemui/core/java/com/android/internal/util/lunaris/LunarisBarSettings.java",
+          "target": "core/java/com/android/internal/util/lunaris/LunarisBarSettings.java",
+          "sha256": "790612e774c4abc49bdc3383e5877a7ad4ced57379080b3bf98d7c7f3f9dac8b"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/animation/src/com/android/systemui/surfaceeffects/shaderutil/GlowShaderLibrary.kt",
+          "target": "packages/SystemUI/animation/src/com/android/systemui/surfaceeffects/shaderutil/GlowShaderLibrary.kt",
+          "sha256": "0ae360f68037d6c1f1c22e791400f55c50fd897c1294584805b89d4897c1a17b"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/drawable/dynamic_island_bluetooth.xml",
+          "target": "packages/SystemUI/res/drawable/dynamic_island_bluetooth.xml",
+          "sha256": "f090ad7add86d6faa2ac17847120cd7faa4949790a4135269f31a3ea3191a957"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/drawable/dynamic_island_charging.xml",
+          "target": "packages/SystemUI/res/drawable/dynamic_island_charging.xml",
+          "sha256": "ef05ff26dfcae16a63d2ec4953c3f6dc0117246ee349572849829d44fc611766"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/drawable/dynamic_island_earbud.xml",
+          "target": "packages/SystemUI/res/drawable/dynamic_island_earbud.xml",
+          "sha256": "2afdd2f65b752f51029dbb21b8cff7220bdddb54181c3abf6256763916d10761"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/drawable/dynamic_island_earbuds_case.xml",
+          "target": "packages/SystemUI/res/drawable/dynamic_island_earbuds_case.xml",
+          "sha256": "cb20ad0c3fa880c9a3a0693b6dd0a3ba9e7316899b2acdad30ade990effcea87"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/drawable/dynamic_island_headphones.xml",
+          "target": "packages/SystemUI/res/drawable/dynamic_island_headphones.xml",
+          "sha256": "f7650d06dd08d722936640e2f5295ddec85098d73c94140808c8ddd9258886ba"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/drawable/dynamic_island_hotspot.xml",
+          "target": "packages/SystemUI/res/drawable/dynamic_island_hotspot.xml",
+          "sha256": "4f1989e4f16ee51e7957a38c73041ba859a325be1b6a1b95206da38df2893e67"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/drawable/dynamic_island_notification.xml",
+          "target": "packages/SystemUI/res/drawable/dynamic_island_notification.xml",
+          "sha256": "8273c2a33559880e9840e5572fdf79b6ca0ca4e8a0fe6ba276446ee9bea48281"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/drawable/dynamic_island_ringer.xml",
+          "target": "packages/SystemUI/res/drawable/dynamic_island_ringer.xml",
+          "sha256": "e9810f4f2e8232b1b67caa2990f88c4e9f3e451166aa95030452b90b94a05fe2"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/drawable/dynamic_island_silent.xml",
+          "target": "packages/SystemUI/res/drawable/dynamic_island_silent.xml",
+          "sha256": "2325e97d1e42f34737e0f89d9638225fb7f0b95d25424ff8d97a10d4b06d4943"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/drawable/dynamic_island_unlock.xml",
+          "target": "packages/SystemUI/res/drawable/dynamic_island_unlock.xml",
+          "sha256": "4e1b53ada19fd1b9a927f32a555fabb4e68ec86ceb73e830d4fd851e3dec06c6"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/drawable/dynamic_island_vibrate.xml",
+          "target": "packages/SystemUI/res/drawable/dynamic_island_vibrate.xml",
+          "sha256": "a2402a757f00cde8cb6337a945900aada6c1f0ee049c441f4937667430a6d860"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/drawable/ic_dynamic_island_alarm.xml",
+          "target": "packages/SystemUI/res/drawable/ic_dynamic_island_alarm.xml",
+          "sha256": "e9aae7698c0a767bf1959375690d30cf3c3a2b431106cbf83af5e5ea1e9f8448"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/drawable/ic_dynamic_island_flashlight.xml",
+          "target": "packages/SystemUI/res/drawable/ic_dynamic_island_flashlight.xml",
+          "sha256": "af18ae3f48bc403caa20761b6cf76f65db92d68ebb5388fa6862cc0836b240f0"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/drawable/ic_dynamic_island_stopwatch.xml",
+          "target": "packages/SystemUI/res/drawable/ic_dynamic_island_stopwatch.xml",
+          "sha256": "374fc0f50d349d76668886fa33023168a24ec5be8c5ab42c134d4188103e98f4"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/drawable/ic_skip_next_filled.xml",
+          "target": "packages/SystemUI/res/drawable/ic_skip_next_filled.xml",
+          "sha256": "94da87c15d52a1602efc48955cb8728b4442f18336ae8bdaab959269765d4eaf"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/drawable/ic_skip_previous_filled.xml",
+          "target": "packages/SystemUI/res/drawable/ic_skip_previous_filled.xml",
+          "sha256": "8d075d7979dd3177cece542c0f0a9afecdf68cbb94de3cc0be881cb0fa6fa860"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/drawable/lunaris_bar_media_seekbar_thumb.xml",
+          "target": "packages/SystemUI/res/drawable/lunaris_bar_media_seekbar_thumb.xml",
+          "sha256": "221b52e586c004ed1ac0c468c78fe3c2eb90c40b019d0f1d60b11ee6167c9368"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/values/lunaris_bar_config.xml",
+          "target": "packages/SystemUI/res/values/lunaris_bar_config.xml",
+          "sha256": "d8009cf7ddf03274b5ee02426cc074d312b4740bb233e1a979c8746884e3b1fe"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/values/lunaris_bar_strings.xml",
+          "target": "packages/SystemUI/res/values/lunaris_bar_strings.xml",
+          "sha256": "a3b860fba649410cf1a14666e4ec7acd9aeaf823d5633edd5e2870b14f6e67a1"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/res/values/lunaris_bar_styles.xml",
+          "target": "packages/SystemUI/res/values/lunaris_bar_styles.xml",
+          "sha256": "1f1de90bac26db69a7492827981854ea92dd7efea7bdfd428537e77d707d6878"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/islandevents/data/source/AppTrackingIslandManager.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/islandevents/data/source/AppTrackingIslandManager.kt",
+          "sha256": "d4881f6a9d770b3471fdccb6a63677fcce36643e8074036040c900c78dac6c30"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/islandevents/data/source/BiometricIslandManager.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/islandevents/data/source/BiometricIslandManager.kt",
+          "sha256": "edbd935a5f9fc64021a37a8a811ffcdc5772d95213239b1edfcd2ec45dd334ab"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/islandevents/data/source/ConnectivityIslandManager.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/islandevents/data/source/ConnectivityIslandManager.kt",
+          "sha256": "770d6f2c8ad9c1beb9bf2511765a60cc166bcce20014bc3f637447d48a194d32"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/islandevents/data/source/NotificationIslandManager.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/islandevents/data/source/NotificationIslandManager.kt",
+          "sha256": "fbc61427a16acbb8a64f1b510688fc81de428aaddefffa48be73e585e44f29a1"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/islandevents/data/source/SmartspaceIslandManager.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/islandevents/data/source/SmartspaceIslandManager.kt",
+          "sha256": "dc4a822d61e86e27f87053ef31626221d25d6ebaf47b2591154831be58dfb6f3"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/islandevents/data/source/SystemIslandManager.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/islandevents/data/source/SystemIslandManager.kt",
+          "sha256": "c7318bbc2d5dec4a892c793b0f95319b044591fa8c2a0491b120f10a789e68c0"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/islandevents/domain/NotificationAlertPolicy.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/islandevents/domain/NotificationAlertPolicy.kt",
+          "sha256": "f3e0af08ae114126f44696b38038585ab20185e52b27b502b9121192f5478c55"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/islandevents/model/IslandEvent.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/islandevents/model/IslandEvent.kt",
+          "sha256": "3db2300dd6f92ec1fae883c18646738987ce62ee9db660310068273baf5bbdaa"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/islandevents/shared/SportsNotification.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/islandevents/shared/SportsNotification.kt",
+          "sha256": "83584d07bbb3f6098c06badd25d5abfae6b9f63800c43296db43adced4e1c917"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/media/controls/shared/MediaSeekBarStyle.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/media/controls/shared/MediaSeekBarStyle.kt",
+          "sha256": "0ab8fa254163854046ec98381471c7e808cd00aab1394bf372e816f801e6b941"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/media/controls/ui/composable/StyledMediaSeekBar.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/media/controls/ui/composable/StyledMediaSeekBar.kt",
+          "sha256": "b6c75ea2342b5ded4720b34aef769e31a980cc7553d69523de0dbe14edc05e9e"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/media/controls/ui/view/CometTrailSeekBar.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/media/controls/ui/view/CometTrailSeekBar.kt",
+          "sha256": "5dda079a440d08be5c225857cabdac4aa25062ae21edd20507ed42bb89e2e204"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/media/controls/ui/view/CosSeekBar.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/media/controls/ui/view/CosSeekBar.kt",
+          "sha256": "05539d7e793ffb4d957ae3c58e137b9a5d6f492788a7419b24d18afd59511e0d"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/media/controls/ui/view/CosSeekLight.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/media/controls/ui/view/CosSeekLight.kt",
+          "sha256": "95ef53d14a16ba491428709d8e0bda519630f0c803b3844c3eb3ae89b65f01d0"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/media/controls/ui/view/GlowingSeekBar.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/media/controls/ui/view/GlowingSeekBar.kt",
+          "sha256": "06e91743ea8786fd4470cd23d6443c4671241c6ed2d3e4ee54f2355e98cb461d"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/media/controls/ui/view/GradientWaveSeekBar.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/media/controls/ui/view/GradientWaveSeekBar.kt",
+          "sha256": "18772cdf0a39f16ee9aa648a37b7d475fd3c1e8cdd13133c6e807c40ce62a781"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/media/controls/ui/view/WaveformSeekBar.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/media/controls/ui/view/WaveformSeekBar.kt",
+          "sha256": "d113fa1035a8f3b16b18c63581be0893245150d5272d08904d0b66210503cb39"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/qs/composefragment/CosMediaRipple.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/qs/composefragment/CosMediaRipple.kt",
+          "sha256": "58a5a83aba135451e4de6de61cac20fa13e673048b17950d146efdf51c703fb1"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/qs/composefragment/CosStatusGlow.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/qs/composefragment/CosStatusGlow.kt",
+          "sha256": "6fee785cd281c20f70569482057245a68bd31e660f7dcc90cb7c924d2064078d"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/qs/composefragment/EdgeSweep.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/qs/composefragment/EdgeSweep.kt",
+          "sha256": "bf283d06ed6f7074e137938e60dffd93bd16242e37aa71530a933648f58a7ab5"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/qs/composefragment/LightShaders.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/qs/composefragment/LightShaders.kt",
+          "sha256": "9019652a93abd5f36e9b1db1d263831991ca3183b08dc6f32c69a142056fd146"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/CircularQsTileSettings.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/CircularQsTileSettings.kt",
+          "sha256": "de1ff42f63e4434524f43a79a902eae60f6002bec136b7335ac452fb05f6202c"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/alarm/shared/model/AlarmPopupModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/alarm/shared/model/AlarmPopupModel.kt",
+          "sha256": "b9eb2e71e70558b6ae192c328b45c2a783996f8d1acae78d3acf53e57387eda6"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/alarm/ui/compose/AlarmPopup.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/alarm/ui/compose/AlarmPopup.kt",
+          "sha256": "fcfc7f6cd5b6fa1668bbdfb5f6b5ac368ded0ae2be7a3d5fb2b4139124feab9a"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/alarm/ui/viewmodel/AlarmPopupChipViewModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/alarm/ui/viewmodel/AlarmPopupChipViewModel.kt",
+          "sha256": "33a19a54537894fd66c424362e4f789f8a2d35f62beff8b79852b922e530d8e2"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/av/AvControlsChipModule.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/av/AvControlsChipModule.kt",
+          "sha256": "253da74a9c4490cfda2b8d0d80ac58c8c15dc233fef806f4d8a99ce8d214c1e7"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/av/domain/interactor/AvControlsChipInteractor.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/av/domain/interactor/AvControlsChipInteractor.kt",
+          "sha256": "7d24e8f4c885ab929568183a84afb4e95998329a101eed228a2579481a3f8553"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/av/shared/model/AvControlsChipModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/av/shared/model/AvControlsChipModel.kt",
+          "sha256": "487d00aed33e930679f8b9f5af651bd8d1280288bf41d18fd5d4f6096719dbe6"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/av/shared/model/SensorActivityModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/av/shared/model/SensorActivityModel.kt",
+          "sha256": "a394147f08ca2c5bca0314f10c5f29a93f42261f32949acf19495d1c4ab2cf3c"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/av/ui/compose/PrivacyIndicatorPopup.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/av/ui/compose/PrivacyIndicatorPopup.kt",
+          "sha256": "817b4e0214f679e888751bce657da82d1ddeff3377e44dadafad77315cde3644"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/av/ui/viewmodel/AvControlsChipViewModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/av/ui/viewmodel/AvControlsChipViewModel.kt",
+          "sha256": "cf9050bd1dd175cabfa74779d08671aa260cc955b50978e3de4a29a1246df9ea"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/flashlight/shared/model/FlashlightPopupModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/flashlight/shared/model/FlashlightPopupModel.kt",
+          "sha256": "9de37b6a83c6f5449e774db98683f9d1ce87f83f15ba47f282b8b5388891d98d"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/flashlight/ui/compose/FlashlightPopup.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/flashlight/ui/compose/FlashlightPopup.kt",
+          "sha256": "c2aa58f9dcd9d78a496f7a7fb3c001597c686cbaf8397f4c1d9dbc94aa35de65"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/flashlight/ui/viewmodel/FlashlightPopupChipViewModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/flashlight/ui/viewmodel/FlashlightPopupChipViewModel.kt",
+          "sha256": "b16c552767ac91c75f63a048cb3b68eba194cc708a43f0eda871cbd72b66a079"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/livescore/shared/model/LiveScoreChipModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/livescore/shared/model/LiveScoreChipModel.kt",
+          "sha256": "762e64954b813fe3ea8eafed8453c01b6137db4c62a1e316b2098d7644297c2d"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/livescore/ui/compose/LiveScorePopup.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/livescore/ui/compose/LiveScorePopup.kt",
+          "sha256": "a3053352df98ca6c2db77cdb1809e90b655d37649e107fd984d402306f6ab198"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/livescore/ui/viewmodel/LiveScorePopupChipViewModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/livescore/ui/viewmodel/LiveScorePopupChipViewModel.kt",
+          "sha256": "2705defab4f2530d90474700f8d55933ef5d6e1de88b4e719c9c78b7e0ee14ea"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/MediaControlChipModule.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/MediaControlChipModule.kt",
+          "sha256": "2e2d217c09c4d19084b482cedfa504430873f7cc276dd3b2385c3dc7c08c434b"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/MediaControlChipStartable.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/MediaControlChipStartable.kt",
+          "sha256": "7155bab23b5d27aec2f036063a7a29f0781c2be2399587461f4877d8c6e629ee"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/domain/interactor/MediaControlChipInteractor.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/domain/interactor/MediaControlChipInteractor.kt",
+          "sha256": "0eb9b1383448a7b17b493bc85e7d47be83a12cb7a807819dceeade6093ae11e3"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/shared/model/MediaControlChipModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/shared/model/MediaControlChipModel.kt",
+          "sha256": "c9dc414d947693bb0db023805fbbbea984f098d2a01962a625c6b1f0fcfeae68"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/ui/compose/LyricsCard.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/ui/compose/LyricsCard.kt",
+          "sha256": "81d9ab875411d97941f90d057da965171a6dcd8ff8d1808cd0121032737f45d0"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/ui/compose/MediaControlPopup.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/ui/compose/MediaControlPopup.kt",
+          "sha256": "b620ffc0eae596eca038500b6f6665ba920028267cfee404dda6467a80ec9517"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/ui/compose/RedesignedMediaPopup.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/ui/compose/RedesignedMediaPopup.kt",
+          "sha256": "1d9ffe1dab534713ceacba9a498c1d6abc8f9c6d419dcd60a4e5060013e2da2d"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/ui/view/MediaArtworkEffects.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/ui/view/MediaArtworkEffects.kt",
+          "sha256": "84f04072c7a3785a31e9e0d84e9e4c6e439c3ad6a1d289626e09e2cac86a57a9"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/ui/view/RedesignedMediaView.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/ui/view/RedesignedMediaView.kt",
+          "sha256": "06f5d45a5b8c606645ac8c7e5cccaf72b16a31f0aa78cf8239bc9c8b32b9e7c5"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/ui/viewmodel/MediaControlChipViewModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/media/ui/viewmodel/MediaControlChipViewModel.kt",
+          "sha256": "b412fcbf2a1e8ffa1a3a9e772c3341a244bb552fc1b43c1ecd63a8a5359837a9"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/StatusBarPopupChips.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/StatusBarPopupChips.kt",
+          "sha256": "ed671e5384c078f7a1812c855264dc57457f89f07be3295f39f31f180e369c9a"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/data/repository/DynamicIslandStateRepository.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/data/repository/DynamicIslandStateRepository.kt",
+          "sha256": "64970afe3ec7e1f14d69f7b3087e77ca36bb5048565aa92bed7a7a98438fa89c"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/data/repository/LunarisBarForegroundApp.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/data/repository/LunarisBarForegroundApp.kt",
+          "sha256": "bd0192e10b60457b475b8ec3f6178b0e96480811e588abbfac5b652a7f0d842e"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/data/repository/LunarisBarTransitionState.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/data/repository/LunarisBarTransitionState.kt",
+          "sha256": "b19f323422f68f92ef60572766f7ff6601d3c9da2c884ce68b077799ac0c1b6d"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/shared/DynamicIslandFeatureSettings.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/shared/DynamicIslandFeatureSettings.kt",
+          "sha256": "60658cc8513e1192ab48a3905326c93526e38edbf62e93f13d90bf3677373182"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/shared/PendingIntentActions.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/shared/PendingIntentActions.kt",
+          "sha256": "b5c8cdffc067387dff03b86860fd17a3a6e53ed402570b6d4739567ab128d9cc"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/shared/SystemEventFeature.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/shared/SystemEventFeature.kt",
+          "sha256": "03aae0a02d0cc54f502119feab1c6545f7747e392744850696474a4d6fa2cfec"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/shared/model/PopupActionModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/shared/model/PopupActionModel.kt",
+          "sha256": "4335563f8df6aa834c492ecb5f23005ea6db4408af637f307b6eb63b9c1a51da"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/LunarisBarWidgetPickerActivity.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/LunarisBarWidgetPickerActivity.kt",
+          "sha256": "811c8abad3d575ae9fabea3fec0db1c3d6344af7e2bfc73f40cad075df7f9aae"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/binder/KeyguardDynamicIslandViewBinder.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/binder/KeyguardDynamicIslandViewBinder.kt",
+          "sha256": "476207abb330c9c7fd4b024bb342f5c282c21ead006b526ef5c604d6927952b8"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/binder/LunarisBarViewBinder.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/binder/LunarisBarViewBinder.kt",
+          "sha256": "1bc023d5d8c8c11aa5c5fe1d9c9e574fc3f784a9b4c8b44a9a8b7e9985c940e9"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/AlbumArtAccent.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/AlbumArtAccent.kt",
+          "sha256": "d7a92914e958363b7173249bed23ba3d78bef84f3bb383e3ddcd321f5ac8dc40"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/AudioReactiveBars.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/AudioReactiveBars.kt",
+          "sha256": "ce103bcf543e9aa845782ecb4f1a49c99cddb6d2c7f5c0ee38f5ed9548788f26"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/CallPopup.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/CallPopup.kt",
+          "sha256": "ac4c21625a1aeda1a5334634d7359a4bb4ef474678967fbeba87435ae13a8642"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/ChipText.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/ChipText.kt",
+          "sha256": "0ce6887410cf6a22ea31c16c9d84bd5461bd238ce5ea29c2f79f65bd73e6fa53"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/ColorOsPopupMotion.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/ColorOsPopupMotion.kt",
+          "sha256": "da1f85710d565ca906edd09bbfa21c5cad4da7b3aab52a6cc8ebb7d53e76acf5"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/DynamicIslandCutout.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/DynamicIslandCutout.kt",
+          "sha256": "3e79673b9ded34deeab36f13b47506bd2deea813db00f689e121b5b40daab4f4"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/DynamicIslandIconFade.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/DynamicIslandIconFade.kt",
+          "sha256": "19b7bba4696623cf6b91840d38e27a9ea5fb48d2181f32ffcbdf7b2f78024aae"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/DynamicIslandMotion.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/DynamicIslandMotion.kt",
+          "sha256": "f8d4b0866c3e200f3dad00d17380cec8bfad4868f2077a951302bd6d1425b688"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/IslandAccents.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/IslandAccents.kt",
+          "sha256": "f9606db3c10a52a85c9ebbd4a8592532f2a37baa2fd670bbd743c0e98c228f6a"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/IslandGlyphBadge.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/IslandGlyphBadge.kt",
+          "sha256": "2862a4908669c5ef4d39ca563ebe17b9594d8ee1534c0dd3af6ef4fd795e8c2d"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/IslandPopupMorph.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/IslandPopupMorph.kt",
+          "sha256": "49d8659518329d4e8d401f1e306a6d60d57ce815afabcbdfcf42b428c3ce547a"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarActions.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarActions.kt",
+          "sha256": "fceb32e8d23e06483410ef2fda37d53906d674f42a2c711407880d38237f80d6"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarCard.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarCard.kt",
+          "sha256": "1fc64b594e5f23a4763e2463d96e6e321935c4b54d1144463e1432d13ca930a7"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarChip.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarChip.kt",
+          "sha256": "6bbe85215b2b1b06caeaaed7bc1ef60b87e2e84f90c0eca110328696487e123d"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarChipRow.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarChipRow.kt",
+          "sha256": "9ba09c8cd2a05e096c32355a82cc6b28a48e9543ab2cdee54d9bca8e2374755f"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarContentTheme.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarContentTheme.kt",
+          "sha256": "bed8e83bfc58681b1049e928bf3f965bbe6bf6202527f73fb1230db2323bcccd"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarGeometry.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarGeometry.kt",
+          "sha256": "8570800990755bbccf5cff2777fd1d16615476e65827f073bffa97ae9786166e"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarMediaPopup.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarMediaPopup.kt",
+          "sha256": "8fe18fc743793d591ae88f43c4e4cf5c44138b2f6c4537d3f39a6ee2f5864647"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarMediaTransition.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarMediaTransition.kt",
+          "sha256": "e3f0575e36eace9ee142f6d0dbeb04990ca492a68017d551a407424d135c7f3f"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarNativePopups.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarNativePopups.kt",
+          "sha256": "c4d2757edbc6b2571adb10bb9c49215c8a8ddcb86360455ef6f7dc667cf524cf"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarPopupMotion.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarPopupMotion.kt",
+          "sha256": "f77616de83636d6f91e15d3f2dc95c11ed6a7eb995c0dbeb19b8eb29104c91ad"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarPopupTouchRegion.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarPopupTouchRegion.kt",
+          "sha256": "be3dade7597450fb61639b42027a0909e7de8a24be302a47755c1c1ed3b69223"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarShapes.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarShapes.kt",
+          "sha256": "43a4e616c29bb7fc44e68f5c168594b21b6b75d7f1618ac075ab7e0837ab6d30"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarSurface.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarSurface.kt",
+          "sha256": "9a697e14e2dd0341ab0ceecce4be4faaee1158c155425fc99462777ff92d4c31"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarTheme.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarTheme.kt",
+          "sha256": "23a21919a7eabcf49b65dc3f6bc1040301a1b15990eeb38b0b217aba8d265b64"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarUtilityCard.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/LunarisBarUtilityCard.kt",
+          "sha256": "ca4e42ef4f6b43b80cea9d49893ac7f45be19ac39c3bbfc0f68f08084e328bfb"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/PopupActionChips.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/PopupActionChips.kt",
+          "sha256": "ede34c7cae16e2e2c008c5327bb1f9f218cdf43327b00d7414e2c626e73add00"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/PopupSurface.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/PopupSurface.kt",
+          "sha256": "8ab59c5fd3c1c8ec7ebd71850819680c234087fe5a846c117cb838540613d427"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/PressScale.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/PressScale.kt",
+          "sha256": "26d1ccb6037c660a3aeffea59a17648b45463fa72d9c9c3075b2b6f52fd365c7"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/RealtimeTimerText.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/RealtimeTimerText.kt",
+          "sha256": "52f8638f3ed4cdab1d007c86ddce4dde5acf9fec4fa75a2b16a0553839350cd0"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/StatusBarDynamicIslandChip.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/StatusBarDynamicIslandChip.kt",
+          "sha256": "28d1b76ebebb814d87e82d578cfa27307fd7e5278c6f7beb8b1cb75eacf3fc4f"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/StatusBarDynamicIslandContainer.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/StatusBarDynamicIslandContainer.kt",
+          "sha256": "1e0b0a917424e5dcd1e3684f4453ef46f7b8a633a612288d3a82db032b67c12e"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/StatusBarPopup.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/StatusBarPopup.kt",
+          "sha256": "39f422e25f0219bb45278c3cec35efac680d4702005746f90c98320fc7bbc582"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/StatusBarPopupChip.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/StatusBarPopupChip.kt",
+          "sha256": "98153a4538a6c8c92c771a8c12ff6fc96b6d7228f2fa27aaba280c31b275edd7"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/StatusBarPopupChipsContainer.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/StatusBarPopupChipsContainer.kt",
+          "sha256": "10106004721bec6e11545487c5c9fb72e4208316021e4d7ea659214a23e07640"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/SystemEventPopup.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/compose/SystemEventPopup.kt",
+          "sha256": "8552bbcfca772c63e514212bbd55924307e82582c647dcaef0d1f0ff43b9258c"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/model/ColorsModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/model/ColorsModel.kt",
+          "sha256": "63bedef9fa26de95a793437b5d084f5815ab6c5c534561b3ca5239ccee01a8fe"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/model/PopupChipModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/model/PopupChipModel.kt",
+          "sha256": "f93f2f0de866e571f707615354e2009d118632aad9dee166df34280c71211c49"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/model/SystemEventKind.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/model/SystemEventKind.kt",
+          "sha256": "a2403f1a5947c660405c0bafc93f6eef9b06d28d1926edd561142e2f2992575c"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/view/DynamicIslandIconFader.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/view/DynamicIslandIconFader.kt",
+          "sha256": "e84583be05794ead87b8a60acbf32ba55be4787ee1c02ec507d1fb83cef6c039"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/viewmodel/OngoingActivityContent.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/viewmodel/OngoingActivityContent.kt",
+          "sha256": "c8adf252323f298f96b271f2b9e36c3f8164c587fb983b2a65f3952dfb75143c"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/viewmodel/StatusBarPopupChipViewModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/viewmodel/StatusBarPopupChipViewModel.kt",
+          "sha256": "365b8cbf61f676d5f5f482cfe5b1027cd033f06d5e31e78cc11ae580a36434ed"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/viewmodel/StatusBarPopupChipsViewModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/viewmodel/StatusBarPopupChipsViewModel.kt",
+          "sha256": "119b5ae8caaf47052b932b74b4a8c3bc962ad9d78a14b890db711a123c4e35ab"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/viewmodel/StatusBarPopupChipsViewModelStore.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/viewmodel/StatusBarPopupChipsViewModelStore.kt",
+          "sha256": "81d9649f8c65ebe3067eeaf30ef473a869cc16ca05f1086ac938d6d3f294b020"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/viewmodel/SystemEventPopupChipsViewModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/viewmodel/SystemEventPopupChipsViewModel.kt",
+          "sha256": "b5b4a0137c62cfc1690c5ede0c782a8ce2396643a40d94e8e526b989b34f9dda"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/viewmodel/SystemEventPopupMapper.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/popups/ui/viewmodel/SystemEventPopupMapper.kt",
+          "sha256": "02e2f2aee83940cb21c56d51d765deae527ad3c49c4207802c1f7b00db03ae3d"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/screenrecord/shared/model/ScreenRecordPopupModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/screenrecord/shared/model/ScreenRecordPopupModel.kt",
+          "sha256": "6763af6e7c677b678dedeabe7d10e9b8e13f48a9861105c15b6efe46b2ed50cb"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/screenrecord/ui/compose/ScreenRecordPopup.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/screenrecord/ui/compose/ScreenRecordPopup.kt",
+          "sha256": "f5ce932319488fa2edc8b9b9521e0f79c628428a88ecb4d6e6ce71c053daa3d6"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/screenrecord/ui/viewmodel/ScreenRecordPopupChipViewModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/screenrecord/ui/viewmodel/ScreenRecordPopupChipViewModel.kt",
+          "sha256": "808f0e8bf036e8e80aa8a5ace9d7455fd6f287211f368d992a8315085bb913a2"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/sharescreen/domain/interactor/ShareScreenPrivacyIndicatorInteractor.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/sharescreen/domain/interactor/ShareScreenPrivacyIndicatorInteractor.kt",
+          "sha256": "435ff76dc6763e4a8c0c1e7d89064a5c1e3967750038a5c34ef2d676bbb05e7a"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/sharescreen/ui/compose/ShareScreenPrivacyIndicatorPopup.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/sharescreen/ui/compose/ShareScreenPrivacyIndicatorPopup.kt",
+          "sha256": "13221177a4910337ceed05c595337bf909350ab667d10686026c5400a7ccf3e9"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/sharescreen/ui/viewmodel/ShareScreenPrivacyIndicatorViewModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/sharescreen/ui/viewmodel/ShareScreenPrivacyIndicatorViewModel.kt",
+          "sha256": "475c82342771652a9f46fd4d6293e7d98dccbdf77549462192f39afc01e33757"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/stopwatch/shared/model/StopwatchPopupModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/stopwatch/shared/model/StopwatchPopupModel.kt",
+          "sha256": "317d2cee0abed650c5edba15bc5320d9c38e6b91857d1abca21c6d2171eb19fb"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/stopwatch/ui/compose/StopwatchPopup.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/stopwatch/ui/compose/StopwatchPopup.kt",
+          "sha256": "b1e4d5eb1d7d4299d8ade8b0cc4c470b6b28ddb95a1cdd2393c5f8c2f738560a"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/src/com/android/systemui/statusbar/featurepods/stopwatch/ui/viewmodel/StopwatchPopupChipViewModel.kt",
+          "target": "packages/SystemUI/src/com/android/systemui/statusbar/featurepods/stopwatch/ui/viewmodel/StopwatchPopupChipViewModel.kt",
+          "sha256": "07b04442502eb8c7534e4572d9765121d30163b1aaeac023fdebec1f5f922965"
+        },
+        {
+          "source": "features/systemui/packages/SystemUI/multivalentTests/src/com/android/systemui/statusbar/featurepods/popups/ui/viewmodel/SystemEventPopupMapperTest.kt",
+          "target": "packages/SystemUI/multivalentTests/src/com/android/systemui/statusbar/featurepods/popups/ui/viewmodel/SystemEventPopupMapperTest.kt",
+          "sha256": "300c127ce316febccbd639680cd1f04549e2ee9a9442c4206a1316075d2e35fa"
+        }
+      ],
+      "patch": "adapters/yaap-17/systemui.patch",
+      "patch_targets": [
+        "core/java/android/provider/Settings.java",
+        "packages/SettingsProvider/src/android/provider/settings/backup/SecureSettings.java",
+        "packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java",
+        "packages/SettingsProvider/src/android/provider/settings/validators/SecureSettingsValidators.java",
+        "packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java",
+        "packages/SettingsProvider/test/src/android/provider/settings/validators/SettingsValidatorsTest.java",
+        "packages/SystemUI/AndroidManifest.xml",
+        "packages/SystemUI/multivalentTests/src/com/android/systemui/brightness/ui/viewmodel/BrightnessSliderViewModelTest.kt",
+        "packages/SystemUI/multivalentTests/src/com/android/systemui/theme/ThemeOverlayControllerTest.java",
+        "packages/SystemUI/res/values-sw600dp/shade_dimens.xml",
+        "packages/SystemUI/res/values/shade_dimens.xml",
+        "packages/SystemUI/src/com/android/systemui/brightness/ui/compose/BrightnessSlider.kt",
+        "packages/SystemUI/src/com/android/systemui/brightness/ui/viewmodel/BrightnessSliderViewModel.kt",
+        "packages/SystemUI/src/com/android/systemui/dagger/SystemUIModule.java",
+        "packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/EditMode.kt",
+        "packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/QuickQuickSettings.kt",
+        "packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/TileGrid.kt",
+        "packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/infinitegrid/CommonTile.kt",
+        "packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/infinitegrid/EditTile.kt",
+        "packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/infinitegrid/Tile.kt",
+        "packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/selection/Selection.kt",
+        "packages/SystemUI/src/com/android/systemui/qs/panels/ui/viewmodel/EditModeViewModel.kt",
+        "packages/SystemUI/src/com/android/systemui/qs/panels/ui/viewmodel/QuickQuickSettingsViewModel.kt",
+        "packages/SystemUI/src/com/android/systemui/qs/panels/ui/viewmodel/TileGridViewModel.kt",
+        "packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarViewController.java",
+        "packages/SystemUI/src/com/android/systemui/statusbar/pipeline/shared/ui/binder/HomeStatusBarViewBinder.kt",
+        "packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayController.java",
+        "packages/SystemUI/tests/src/com/android/systemui/qs/panels/ui/compose/TileTest.kt",
+        "packages/SystemUI/tests/utils/src/com/android/systemui/brightness/ui/viewmodel/BrightnessSliderViewModelKosmos.kt",
+        "packages/SystemUI/tests/utils/src/com/android/systemui/qs/panels/ui/viewmodel/EditModeViewModelKosmos.kt",
+        "packages/SystemUI/tests/utils/src/com/android/systemui/qs/panels/ui/viewmodel/QuickQuickSettingsViewModelKosmos.kt",
+        "packages/SystemUI/tests/utils/src/com/android/systemui/qs/panels/ui/viewmodel/TileGridViewModelKosmos.kt"
+      ],
+      "patch_sha256": "57547886cccf9d00d48eee74dcf58005160d9e938846120bdb5476e2395b80ad"
+    },
+    {
+      "path": "packages/apps/Settings",
+      "baseline": "b1e68c581c054f3abb6b1e7b784e4e5c0cc3b6d9",
+      "files": [
+        {
+          "source": "features/settings/res/layout/lunaris_bar_app_picker.xml",
+          "target": "res/layout/lunaris_bar_app_picker.xml",
+          "sha256": "7495eb3869181257e81cd8be949395dba421f19c01387644bd350fe2ef485128"
+        },
+        {
+          "source": "features/settings/res/layout/lunaris_bar_shortcut_editor.xml",
+          "target": "res/layout/lunaris_bar_shortcut_editor.xml",
+          "sha256": "0c74f061c6ebc4ed91ea0a206c0642050feb30ec570ec2e93d9ace085af2dede"
+        },
+        {
+          "source": "features/settings/res/values/circular_qs_strings.xml",
+          "target": "res/values/circular_qs_strings.xml",
+          "sha256": "7b4a38457e916f16b38c88d1f05ffae09bd6a677de839c2ce6ed667c052fa8ad"
+        },
+        {
+          "source": "features/settings/res/values/lunaris_bar_strings.xml",
+          "target": "res/values/lunaris_bar_strings.xml",
+          "sha256": "64f565f46901054318f4914efc08282dd62c5a95c238116f9f6c56bbe6928117"
+        },
+        {
+          "source": "features/settings/res/xml/dynamic_island_settings.xml",
+          "target": "res/xml/dynamic_island_settings.xml",
+          "sha256": "734fe70a224f11a90c2c6a40b8c0d5eb9093ecdd868cb1c40b64db03ee730d6e"
+        },
+        {
+          "source": "features/settings/res/xml/lunaris_bar_appearance.xml",
+          "target": "res/xml/lunaris_bar_appearance.xml",
+          "sha256": "efc175c2fc0a5d74c613ae882f304575db26b34b30236eb8566c69d38ef5f2e1"
+        },
+        {
+          "source": "features/settings/res/xml/lunaris_bar_card.xml",
+          "target": "res/xml/lunaris_bar_card.xml",
+          "sha256": "a4856b97ad9bc127726d063eae16d48a7afde0a24133e437338a5cb1051738f9"
+        },
+        {
+          "source": "features/settings/res/xml/lunaris_bar_cards.xml",
+          "target": "res/xml/lunaris_bar_cards.xml",
+          "sha256": "c078b0dec1a7cbf703cb5471c9aa9234a39e6eb65255aa93f54496ab034d5bab"
+        },
+        {
+          "source": "features/settings/res/xml/lunaris_bar_colors.xml",
+          "target": "res/xml/lunaris_bar_colors.xml",
+          "sha256": "fa015ab39090339b51c71f21113dfb8b78ab5e36eac877e01efaff393c987052"
+        },
+        {
+          "source": "features/settings/res/xml/lunaris_bar_feature_style.xml",
+          "target": "res/xml/lunaris_bar_feature_style.xml",
+          "sha256": "19551b34b41bae9875abac171ee7de63bccff1bb9805c52315092764e998de61"
+        },
+        {
+          "source": "features/settings/res/xml/lunaris_bar_features.xml",
+          "target": "res/xml/lunaris_bar_features.xml",
+          "sha256": "110cb60000b70bdbd9cdc2a63d4ff51930de46e24a20ffdd8d9201de23e0627c"
+        },
+        {
+          "source": "features/settings/res/xml/lunaris_bar_gestures.xml",
+          "target": "res/xml/lunaris_bar_gestures.xml",
+          "sha256": "6201449c86703a64206e6516f79cff3c130bd7c886e2ea3dd2a494224fa7626d"
+        },
+        {
+          "source": "features/settings/res/xml/lunaris_bar_media.xml",
+          "target": "res/xml/lunaris_bar_media.xml",
+          "sha256": "8f202b64ba8f7f72b223c4e2f73198531bb2ea03ed3d0c1ee2c8a68522ae0abf"
+        },
+        {
+          "source": "features/settings/res/xml/lunaris_bar_motion.xml",
+          "target": "res/xml/lunaris_bar_motion.xml",
+          "sha256": "f8edc1ffa1a879b40f54c57074a01f6f0574620fc99be7bf785f4d6c40b46746"
+        },
+        {
+          "source": "features/settings/res/xml/lunaris_bar_preference_templates.xml",
+          "target": "res/xml/lunaris_bar_preference_templates.xml",
+          "sha256": "d1150c907edaa74ea9744498634c124fab6b790e85cc809b2d4f82fb27bd7021"
+        },
+        {
+          "source": "features/settings/res/xml/yaap_settings_circular_qs.xml",
+          "target": "res/xml/yaap_settings_circular_qs.xml",
+          "sha256": "7f59dffa3ff1bc889028343d23c5f062c07c1bcef42ea621dacdb8c359b3a843"
+        },
+        {
+          "source": "features/settings/src/com/android/settings/system/CircularQsSettings.java",
+          "target": "src/com/android/settings/system/CircularQsSettings.java",
+          "sha256": "a0a43d21543ac0ec7fbb60b4feae7485bb3f1ccabda093b5c746f507e08692a2"
+        },
+        {
+          "source": "features/settings/src/com/android/settings/system/DynamicIslandSettings.kt",
+          "target": "src/com/android/settings/system/DynamicIslandSettings.kt",
+          "sha256": "27e0003943de8133aba05283b08ee2bed05ade0174c817cd74b5eaecf7e40971"
+        },
+        {
+          "source": "features/settings/src/com/android/settings/system/LunarisBarCardSettings.kt",
+          "target": "src/com/android/settings/system/LunarisBarCardSettings.kt",
+          "sha256": "fd548eb44b98619a0449235bb354ca1ecadd435c5b0476e9ae8fe2b052030956"
+        },
+        {
+          "source": "features/settings/src/com/android/settings/system/LunarisBarCardsSettings.kt",
+          "target": "src/com/android/settings/system/LunarisBarCardsSettings.kt",
+          "sha256": "ff70b605325f23eb2a123a7764cd352521e3aaf4fb4dfaeec75413909b4cbafe"
+        },
+        {
+          "source": "features/settings/src/com/android/settings/system/LunarisBarEditor.kt",
+          "target": "src/com/android/settings/system/LunarisBarEditor.kt",
+          "sha256": "1b5c56fcfe3d9a0ef76f6b38c433223a456d38a754b1eab5fe1799c2e7cf51fe"
+        },
+        {
+          "source": "features/settings/src/com/android/settings/system/LunarisBarOptions.kt",
+          "target": "src/com/android/settings/system/LunarisBarOptions.kt",
+          "sha256": "72d70d56a0b5c8469908514618d15088aba2a1d9536c13192c216180e2de1b72"
+        },
+        {
+          "source": "features/settings/src/com/android/settings/system/LunarisBarPreferenceFragment.kt",
+          "target": "src/com/android/settings/system/LunarisBarPreferenceFragment.kt",
+          "sha256": "1446e7eda15ef6afe6f28b004d3cde2f176be0e7bab08131c02e6b3950cb46ed"
+        },
+        {
+          "source": "features/settings/src/com/yasp/settings/preferences/LunarisBarSeekBarPreference.java",
+          "target": "src/com/yasp/settings/preferences/LunarisBarSeekBarPreference.java",
+          "sha256": "1d248c0a0a7c138c7470bc71aec044e80a25b681d0cf0fae713fef3cfd221e42"
+        },
+        {
+          "source": "features/settings/tests/robotests/src/com/android/settings/system/LunarisBarSeekBarPreferenceTest.kt",
+          "target": "tests/robotests/src/com/android/settings/system/LunarisBarSeekBarPreferenceTest.kt",
+          "sha256": "c16c405e28b810f47117a051d39246eb7169519d8db20af1668102b2f673965c"
+        },
+        {
+          "source": "features/settings/src/com/yasp/settings/preferences/colorpicker/LunarisBarColorPickerPreference.java",
+          "target": "src/com/yasp/settings/preferences/colorpicker/LunarisBarColorPickerPreference.java",
+          "sha256": "d37d3a95c8eda72cada7d54b8c752cb5f6a7d1a1d9b20c2d4e5efd62331c9e76"
+        },
+        {
+          "source": "features/settings/src/com/android/settings/display/darkmode/PureBlackThemePreference.kt",
+          "target": "src/com/android/settings/display/darkmode/PureBlackThemePreference.kt",
+          "sha256": "1a2701da88b56f2c0521f2220ce10ae1c931c7da86109bfe378cee52616d3ce4"
+        },
+        {
+          "source": "features/settings/src/com/android/settings/display/RefreshRatePreferenceController.java",
+          "target": "src/com/android/settings/display/RefreshRatePreferenceController.java",
+          "sha256": "552b0b0ac74ce2a23dc524c364f3d76c6b8198b8a9bcf45b47314d133448df24"
+        },
+        {
+          "source": "features/settings/res/values/refresh_rate_strings.xml",
+          "target": "res/values/refresh_rate_strings.xml",
+          "sha256": "e1d829dddb782da6f305b065ee9825014c200eceb7dfe01150b2fbf2eaaed57d"
+        },
+        {
+          "source": "features/settings/tests/robotests/src/com/android/settings/display/RefreshRatePreferenceControllerTest.java",
+          "target": "tests/robotests/src/com/android/settings/display/RefreshRatePreferenceControllerTest.java",
+          "sha256": "87a3b92887c8e273cc5bcb5ac219c2ff42e6ceaf4b35f9495ddb31c6d2e5c47e"
+        },
+        {
+          "source": "features/settings/src/com/android/settings/system/LunarisBarPreviewPreference.kt",
+          "target": "src/com/android/settings/system/LunarisBarPreviewPreference.kt",
+          "sha256": "1f3ac8ec81c574df60737b8892ef34fd63974996cd402ffdf355dbba2b883b14"
+        },
+        {
+          "source": "features/settings/res/layout/lunaris_bar_preview.xml",
+          "target": "res/layout/lunaris_bar_preview.xml",
+          "sha256": "5b608fd7111f762cc22342f8762c5e8412f15a42d5b11f6d1340a0ef42ea34a7"
+        },
+        {
+          "source": "features/settings/res/values/lunaris_bar_preview_strings.xml",
+          "target": "res/values/lunaris_bar_preview_strings.xml",
+          "sha256": "f06055b48a9ae0c04eae6309bc52da54de649ce40df6bff31b121e8913f589cd"
+        },
+        {
+          "source": "features/settings/tests/robotests/src/com/android/settings/system/LunarisBarPreviewPreferenceTest.kt",
+          "target": "tests/robotests/src/com/android/settings/system/LunarisBarPreviewPreferenceTest.kt",
+          "sha256": "76149552537e2abe3cb6950d13ab77791478af3d071a742052f7e29ca7157adc"
+        }
+      ],
+      "patch": "adapters/yaap-17/settings.patch",
+      "patch_targets": [
+        "res/values/yaap_strings.xml",
+        "res/xml/dark_mode_settings.xml",
+        "res/xml/display_settings.xml",
+        "res/xml/yaap_settings_brightness_slider.xml",
+        "res/xml/yaap_settings_quicksettings.xml",
+        "res/xml/yaap_settings_statusbar.xml",
+        "src/com/android/settings/core/gateway/SettingsGateway.java",
+        "src/com/android/settings/display/DisplayScreen.kt",
+        "src/com/android/settings/display/darkmode/DarkModeScreen.kt",
+        "src/com/android/settings/system/BrightnessSliderSettings.java",
+        "src/com/android/settings/system/QuickSettings.java"
+      ],
+      "patch_sha256": "1c1f36bfba0186adff1f0b1549b900f2773152b31fd1d31042bd81d4bd874d22"
+    },
+    {
+      "path": "packages/apps/Launcher3",
+      "baseline": "dc493be0b229d3b536ef69353b11f99b6cbadc5b",
+      "files": [
+        {
+          "source": "features/launcher/res/drawable/ic_music_note_24dp.xml",
+          "target": "res/drawable/ic_music_note_24dp.xml",
+          "sha256": "e7236c86561f4cdf456489aaf12969698bd491f6f8fffd359ffa6239b7266d3e"
+        },
+        {
+          "source": "features/launcher/res/drawable/ic_search_alarm.xml",
+          "target": "res/drawable/ic_search_alarm.xml",
+          "sha256": "075a4c4af096e1eb747967fc76f6bc1f6ee622ac0e7f0dfd1fcda44c0ca41acc"
+        },
+        {
+          "source": "features/launcher/res/drawable/ic_search_event.xml",
+          "target": "res/drawable/ic_search_event.xml",
+          "sha256": "797d27dbbe31e10b0e852cb28c30664448c3c3765636b7c0f7b9e79e29f564f0"
+        },
+        {
+          "source": "features/launcher/res/drawable/ic_search_timer.xml",
+          "target": "res/drawable/ic_search_timer.xml",
+          "sha256": "b02ce594d7ce699f95f8c48f76762691b3cf6d3971773851e19f31c9e0bcce0d"
+        },
+        {
+          "source": "features/launcher/res/drawable/ic_smartspace_bluetooth.xml",
+          "target": "res/drawable/ic_smartspace_bluetooth.xml",
+          "sha256": "a8f3eca8653bc6b8fdc78654f41c7e9dac43fe3a4973d481a4803465ff0e0045"
+        },
+        {
+          "source": "features/launcher/res/layout/smartspace_event_page.xml",
+          "target": "res/layout/smartspace_event_page.xml",
+          "sha256": "51a5f8b387754bd6a49573f372711e236227c0d713ba4358b8511213187abb8e"
+        },
+        {
+          "source": "features/launcher/res/layout/smartspace_view.xml",
+          "target": "res/layout/smartspace_view.xml",
+          "sha256": "88c611a0a85b4b96e713464a4030ae8092c06bbf48c68adac55dadb4c9efb79e"
+        },
+        {
+          "source": "features/launcher/res/values/smartspace_strings.xml",
+          "target": "res/values/smartspace_strings.xml",
+          "sha256": "421030d5230b378cba7aa45336c1009219740836ad4ee9be57c0777f2dcaf0ad"
+        },
+        {
+          "source": "features/launcher/res/values/smartspace_styles.xml",
+          "target": "res/values/smartspace_styles.xml",
+          "sha256": "1180e2cf3d1b9eb5cf362fda3a3ae467cdb38e62f1f3cd00b0c6489d8b98c745"
+        },
+        {
+          "source": "features/launcher/src/com/android/launcher3/settings/SmartspaceSettings.java",
+          "target": "src/com/android/launcher3/settings/SmartspaceSettings.java",
+          "sha256": "0ad118faea1a9d46eb4d7a1230be9e06b98a84bdb68cb88cb016b3abcc4277a3"
+        },
+        {
+          "source": "features/launcher/src/com/android/launcher3/smartspace/AtAGlanceView.java",
+          "target": "src/com/android/launcher3/smartspace/AtAGlanceView.java",
+          "sha256": "c6c3f9017ad43b070ce9eb5f328cb981c7bf750c9791f4e791fbcc4c06e35ff3"
+        },
+        {
+          "source": "features/launcher/src/com/android/launcher3/smartspace/SmartspaceCard.java",
+          "target": "src/com/android/launcher3/smartspace/SmartspaceCard.java",
+          "sha256": "3310fcbc09abfcdd8200dc311fcd62f829360819992e9e001fc376fbd9cbc2e1"
+        },
+        {
+          "source": "features/launcher/src/com/android/launcher3/smartspace/SmartspaceContent.java",
+          "target": "src/com/android/launcher3/smartspace/SmartspaceContent.java",
+          "sha256": "28c2bb947ddc29cef425ab482a28c911add515aa5c06af1251d0c9ca6be5cb93"
+        },
+        {
+          "source": "features/launcher/src/com/android/launcher3/smartspace/SmartspaceController.java",
+          "target": "src/com/android/launcher3/smartspace/SmartspaceController.java",
+          "sha256": "c3e258c4a2c7b132a25623370e5ae014d2caa7dc08ce80f22fa31797b997f949"
+        },
+        {
+          "source": "features/launcher/src/com/android/launcher3/smartspace/SmartspaceEvent.java",
+          "target": "src/com/android/launcher3/smartspace/SmartspaceEvent.java",
+          "sha256": "f81b2183557b4056cb3e78f2cb07916ed1f9b9bd549ccc1951ef15eafd467b2d"
+        },
+        {
+          "source": "features/launcher/src/com/android/launcher3/smartspace/SmartspaceView.java",
+          "target": "src/com/android/launcher3/smartspace/SmartspaceView.java",
+          "sha256": "256fcb4f5ca04d1033bbbb11f58a5d565e3faa697e13f52aaad2919810073b5c"
+        },
+        {
+          "source": "features/launcher/tests/multivalentTests/src/com/android/launcher3/smartspace/SmartspaceActionTest.kt",
+          "target": "tests/multivalentTests/src/com/android/launcher3/smartspace/SmartspaceActionTest.kt",
+          "sha256": "1e736def1a2dff27478406c4040cc1d6bc5d231ce73d9f0c3c86e9a231d44933"
+        },
+        {
+          "source": "features/launcher/tests/multivalentTests/src/com/android/launcher3/smartspace/SmartspaceCardTest.kt",
+          "target": "tests/multivalentTests/src/com/android/launcher3/smartspace/SmartspaceCardTest.kt",
+          "sha256": "2ce483c94cb160ccca357c0280a276fbf37ef2358a9359c229e24d479d2b1bfe"
+        },
+        {
+          "source": "features/launcher/tests/multivalentTests/src/com/android/launcher3/smartspace/AtAGlanceViewTest.kt",
+          "target": "tests/multivalentTests/src/com/android/launcher3/smartspace/AtAGlanceViewTest.kt",
+          "sha256": "ba3d2b96beefc55787b454c8f7bf9554a3cfbce608b94612c6e7a7e2597f4130"
+        }
+      ],
+      "patch": "adapters/yaap-17/launcher.patch",
+      "patch_targets": [
+        "AndroidManifest-common.xml",
+        "privapp_whitelist_com.android.launcher3-ext.xml",
+        "res/values/id.xml",
+        "res/xml/launcher_preferences.xml",
+        "src/com/android/launcher3/Launcher.java",
+        "src/com/android/launcher3/LauncherPrefs.kt",
+        "src/com/android/launcher3/settings/SettingsActivity.java",
+        "src/com/android/launcher3/Workspace.java"
+      ],
+      "patch_sha256": "80e666a1ed6fdd58767e71f213e3aca130e89f8887796f6294217e5b6344c3bf"
+    }
+  ]
+}

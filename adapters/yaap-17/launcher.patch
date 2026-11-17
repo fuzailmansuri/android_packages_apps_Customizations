@@ -1,0 +1,192 @@
+diff --git a/AndroidManifest-common.xml b/AndroidManifest-common.xml
+index 63e203c..aa9e8c5 100644
+--- a/AndroidManifest-common.xml
++++ b/AndroidManifest-common.xml
+@@ -51,6 +51,7 @@
+     <uses-permission android:name="com.android.systemui.permission.LAUNCH_ACCESSIBILITY_SHORTCUT_CHOOSER_DIALOG" />
+     <uses-permission android:name="android.permission.DEVICE_POWER" />
+     <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" />
++    <uses-permission android:name="android.permission.ACCESS_SMARTSPACE" />
+     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+     <uses-permission android:name="android.permission.ACCESS_CONTEXTUAL_SEARCH"/>
+     <uses-permission android:name="android.permission.REGISTER_STATS_PULL_ATOM"/>
+diff --git a/privapp_whitelist_com.android.launcher3-ext.xml b/privapp_whitelist_com.android.launcher3-ext.xml
+index 5e9f5a6..312e8fb 100644
+--- a/privapp_whitelist_com.android.launcher3-ext.xml
++++ b/privapp_whitelist_com.android.launcher3-ext.xml
+@@ -18,6 +18,7 @@
+     <!-- Additional permissions on top of privapp_whitelist_com.android.launcher3.xml -->
+     <privapp-permissions package="com.android.launcher3">
+         <permission name="android.permission.FORCE_STOP_PACKAGES"/>
++        <permission name="android.permission.ACCESS_SMARTSPACE"/>
+         <permission name="android.permission.INTERACT_ACROSS_USERS"/>
+         <permission name="android.permission.ACCESS_CONTEXTUAL_SEARCH"/>
+         <permission name="android.permission.REGISTER_STATS_PULL_ATOM"/>
+diff --git a/res/values/id.xml b/res/values/id.xml
+index 1e6d1b0..f9484cb 100644
+--- a/res/values/id.xml
++++ b/res/values/id.xml
+@@ -15,6 +15,7 @@
+     limitations under the License.
+ -->
+ <resources>
++    <item type="id" name="launcher_smartspace" />
+     <item type="id" name="apps_list_view_work" />
+     <item type="id" name="view_type_widgets_space" />
+     <item type="id" name="view_type_widgets_list" />
+diff --git a/res/xml/launcher_preferences.xml b/res/xml/launcher_preferences.xml
+index 0cd05d4..e270e77 100644
+--- a/res/xml/launcher_preferences.xml
++++ b/res/xml/launcher_preferences.xml
+@@ -158,6 +158,12 @@
+         android:key="misc_category"
+         android:title="@string/category_misc">
+ 
++        <PreferenceScreen
++            android:key="smartspace_events"
++            android:title="@string/smartspace_events_title"
++            android:summary="@string/smartspace_events_summary"
++            launcher:iconSpaceReserved="false" />
++
+         <com.android.launcher3.settings.preferences.CustomSeekBarPreference
+             android:key="pref_recents_opacity"
+             android:title="@string/recents_opacity_title"
+diff --git a/src/com/android/launcher3/Launcher.java b/src/com/android/launcher3/Launcher.java
+index d16aa3a..59bfac9 100644
+--- a/src/com/android/launcher3/Launcher.java
++++ b/src/com/android/launcher3/Launcher.java
+@@ -1155,6 +1155,9 @@ public class Launcher extends StatefulActivity<LauncherState>
+         TraceHelper.INSTANCE.beginSection(ON_RESUME_EVT);
+         super.onResume();
+         mLauncherUiState.setIsResumedActivity(true);
++        com.android.launcher3.smartspace.AtAGlanceView smartspace =
++                findViewById(R.id.launcher_smartspace);
++        if (smartspace != null) smartspace.setResumed(true);
+         DragView.removeAllViews(this);
+         mOverlayManager.onActivityResumed();
+         TraceHelper.INSTANCE.endSection();
+@@ -1171,6 +1174,9 @@ public class Launcher extends StatefulActivity<LauncherState>
+ 
+         super.onPause();
+         mLauncherUiState.setIsResumedActivity(false);
++        com.android.launcher3.smartspace.AtAGlanceView smartspace =
++                findViewById(R.id.launcher_smartspace);
++        if (smartspace != null) smartspace.setResumed(false);
+         mDragController.cancelDrag();
+         mLastTouchUpTime = -1;
+         mDropTargetBar.animateToVisibility(false);
+@@ -1237,6 +1243,7 @@ public class Launcher extends StatefulActivity<LauncherState>
+         // default state, otherwise we will update to the wrong offsets in RTL
+         mWorkspace.lockWallpaperToDefaultPage();
+         mWorkspace.bindAndInitFirstWorkspaceScreen();
++        com.android.launcher3.smartspace.AtAGlanceView.attach(this);
+         mDragController.addDragListener(mWorkspace);
+ 
+         // Get the search/delete/uninstall bar
+diff --git a/src/com/android/launcher3/LauncherPrefs.kt b/src/com/android/launcher3/LauncherPrefs.kt
+index 9d1e565..413f955 100644
+--- a/src/com/android/launcher3/LauncherPrefs.kt
++++ b/src/com/android/launcher3/LauncherPrefs.kt
+@@ -276,10 +276,35 @@ constructor(@ApplicationContext private val encryptedContext: Context) {
+         @JvmField val ALLAPPS_ICON_CUSTOMIZATION = backedUpItem("pref_allapps_icon_customization", true)
+         @JvmField val APP_DRAWER_OPACITY = backedUpItem("pref_app_drawer_opacity", 60)
+         @JvmField val RECENTS_OPACITY = backedUpItem("pref_recents_opacity", 40)
++        @JvmField val SHOW_SMARTSPACE = backedUpItem("pref_show_smartspace", false)
++        @JvmField val SMARTSPACE_WEATHER = backedUpItem("pref_smartspace_weather", true)
++        @JvmField val SMARTSPACE_CALENDAR = backedUpItem("pref_smartspace_calendar", true)
++        @JvmField val SMARTSPACE_MUSIC = backedUpItem("pref_smartspace_music", true)
++        @JvmField val SMARTSPACE_ALARMS = backedUpItem("pref_smartspace_alarms", true)
++        @JvmField val SMARTSPACE_FLASHLIGHT = backedUpItem("pref_smartspace_flashlight", true)
++        @JvmField val SMARTSPACE_BLUETOOTH = backedUpItem("pref_smartspace_connectivity", true)
++        @JvmField val SMARTSPACE_TIMERS = backedUpItem("pref_smartspace_timers", true)
++        @JvmField val SMARTSPACE_REMINDERS = backedUpItem("pref_smartspace_reminders", true)
++        @JvmField val SMARTSPACE_TRAVEL = backedUpItem("pref_smartspace_travel", true)
++        @JvmField val SMARTSPACE_SPORTS = backedUpItem("pref_smartspace_sports", true)
++        @JvmField val SMARTSPACE_PACKAGES = backedUpItem("pref_smartspace_packages", true)
++        @JvmField val SMARTSPACE_FINANCE = backedUpItem("pref_smartspace_finance", true)
++        @JvmField val SMARTSPACE_SHOPPING = backedUpItem("pref_smartspace_shopping", true)
++        @JvmField val SMARTSPACE_FITNESS = backedUpItem("pref_smartspace_fitness", true)
++        @JvmField val SMARTSPACE_DOORBELL = backedUpItem("pref_smartspace_doorbell", true)
++        @JvmField val SMARTSPACE_OTHER = backedUpItem("pref_smartspace_other", true)
+ 
+         @JvmField
+         val PROMISE_ICON_IDS = nonRestorableItem(InstallSessionHelper.PROMISE_ICON_IDS, "")
+-        @JvmField val BLUR_DEPTH = backedUpItem("pref_blur_depth", 48)
++        @JvmField
++        val BLUR_DEPTH =
++            backedUpItem("pref_blur_depth", Int::class.java) { context ->
++                val res = context.resources
++                Math.round(
++                    res.getDimension(R.dimen.max_depth_blur_radius_enhanced) /
++                        res.displayMetrics.density
++                )
++            }
+         @JvmField val WORK_EDU_STEP = backedUpItem("showed_work_profile_edu", 0)
+         @JvmField
+         val WORKSPACE_SIZE =
+diff --git a/src/com/android/launcher3/Workspace.java b/src/com/android/launcher3/Workspace.java
+index 6e41705..ed4b533 100644
+--- a/src/com/android/launcher3/Workspace.java
++++ b/src/com/android/launcher3/Workspace.java
+@@ -446,7 +446,11 @@ public class Workspace<T extends View & PageIndicator> extends PagedView<T>
+         mWorkspaceFadeInAdjacentScreens = grid.shouldFadeAdjacentWorkspaceScreens();
+ 
+         Rect padding = grid.getWorkspaceProfile().getWorkspacePadding();
+-        setPadding(padding.left, padding.top, padding.right, padding.bottom);
++        int topPadding = LauncherPrefs.SHOW_SMARTSPACE.get(getContext())
++                ? Math.max(padding.top,
++                        com.android.launcher3.smartspace.AtAGlanceView.reservedTopPadding(
++                                getContext(), insets.top)) : padding.top;
++        setPadding(padding.left, topPadding, padding.right, padding.bottom);
+         mInsets.set(insets);
+ 
+         if (mWorkspaceFadeInAdjacentScreens) {
+diff --git a/src/com/android/launcher3/settings/SettingsActivity.java b/src/com/android/launcher3/settings/SettingsActivity.java
+index 2487224..35523bb 100644
+--- a/src/com/android/launcher3/settings/SettingsActivity.java
++++ b/src/com/android/launcher3/settings/SettingsActivity.java
+@@ -203,6 +203,7 @@ public class SettingsActivity extends FragmentActivity
+         private String mHighLightKey;
+ 
+         private boolean mPreferenceHighlighted = false;
++        private SmartspaceSettings mSmartspaceSettings;
+ 
+         protected static final String GSA_PACKAGE = "com.google.android.googlequicksearchbox";
+ 
+@@ -240,6 +241,7 @@ public class SettingsActivity extends FragmentActivity
+ 
+             getPreferenceManager().setSharedPreferencesName(LauncherFiles.SHARED_PREFERENCES_KEY);
+             setPreferencesFromResource(R.xml.launcher_preferences, rootKey);
++            mSmartspaceSettings = new SmartspaceSettings(this);
+ 
+             PreferenceScreen screen = getPreferenceScreen();
+             for (int i = screen.getPreferenceCount() - 1; i >= 0; i--) {
+@@ -404,6 +406,7 @@ public class SettingsActivity extends FragmentActivity
+             final float px = res.getDimension(R.dimen.max_depth_blur_radius_enhanced);
+             final int dp = Math.round(px / res.getDisplayMetrics().density);
+             blurPref.setDefaultValue(dp);
++            blurPref.setValue(LauncherPrefs.BLUR_DEPTH.get(getContext()));
+         }
+ 
+         private void updateIsGoogleAppEnabled() {
+@@ -484,6 +487,7 @@ public class SettingsActivity extends FragmentActivity
+         @Override
+         public void onResume() {
+             super.onResume();
++            if (mSmartspaceSettings != null) mSmartspaceSettings.start();
+ 
+             if (isAdded() && !mPreferenceHighlighted) {
+                 PreferenceHighlighter highlighter = createHighlighter();
+@@ -498,6 +502,12 @@ public class SettingsActivity extends FragmentActivity
+             }
+         }
+ 
++        @Override
++        public void onPause() {
++            if (mSmartspaceSettings != null) mSmartspaceSettings.stop();
++            super.onPause();
++        }
++
+         @Override
+         public void onDestroy() {
+             super.onDestroy();

@@ -16,8 +16,9 @@ that these later changes compile or run correctly.
 
 All seven integration-tool host tests pass, covering repeat application, checks
 without writes, damaged payloads, file and patch conflicts, symlink rejection and
-rollback after unexpected failure. All 187 shared feature files match the active
-source tree; the YAAP adapter check reports zero files or patches to install.
+rollback after unexpected failure. All 189 shared feature files are covered by the
+YAAP manifest and match its recorded hashes. The current YAAP checkout has framework
+drift, so its adapter must be revalidated before claiming zero pending changes.
 Android port tests have been written but have not been run on a device.
 
 Run the integration tool's host checks with:

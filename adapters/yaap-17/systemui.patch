@@ -1,0 +1,1512 @@
+diff --git a/core/java/android/provider/Settings.java b/core/java/android/provider/Settings.java
+index 2597508e6..0fc1c8523 100644
+--- a/core/java/android/provider/Settings.java
++++ b/core/java/android/provider/Settings.java
+@@ -6943,6 +6943,21 @@ public final class Settings {
+         @Readable
+         public static final String QS_FOOTER_TEXT_STRING = "qs_footer_text_string";
+ 
++        /**
++         * Whether Quick Settings tiles use circular/pill-shaped corners. Defaults to disabled.
++         * @hide
++         */
++        @Readable
++        public static final String QS_TILES_CIRCULAR = "qs_tiles_circular";
++
++        /**
++         * Circular Quick Settings tile height in dp, from 72 to 80 inclusive. Defaults to 72.
++         * Ignored when circular tiles are disabled.
++         * @hide
++         */
++        @Readable
++        public static final String QS_TILES_CIRCULAR_SIZE = "qs_tiles_circular_size";
++
+         /**
+          * Whether to show the battery info on the lockscreen while charging
+          * @hide
+@@ -7589,6 +7604,14 @@ public final class Settings {
+         @Readable
+         public static final String BRIGHTNESS_SLIDER_HAPTICS = "brightness_slider_haptics";
+ 
++        /**
++         * Whether the QS brightness slider uses the rounded style.
++         * @hide
++         */
++        @Readable
++        @SuppressLint({"NoSettingsProvider", "UnflaggedApi"})
++        public static final String QS_BRIGHTNESS_SLIDER_ROUND = "qs_brightness_slider_round";
++
+         /**
+          * Whether to enable volume dialog slider haptic feedbacks
+          * @hide
+@@ -15038,7 +15061,7 @@ public final class Settings {
+         public static final String DOZE_ON_CHARGE_NOW = "doze_on_charge_now";
+ 
+         /**
+-         * Whether to show QS brightness slider
++         * QS brightness slider visibility: 0 hidden, 1 expanded QS only, 2 always.
+          * @hide
+          */
+         @Readable
+@@ -15223,6 +15246,12 @@ public final class Settings {
+          */
+         public static final String UI_NIGHT_MODE_DIM_WALL = "ui_night_mode_dim_wall";
+ 
++        /**
++         * Whether dark theme uses pure-black backgrounds.
++         * @hide
++         */
++        public static final String BERRY_BLACK_THEME = "berry_black_theme";
++
+         /**
+          * The amount to dim wallpaper when night (dark) UI is activated in %
+          * @hide
+diff --git a/packages/SettingsProvider/src/android/provider/settings/backup/SecureSettings.java b/packages/SettingsProvider/src/android/provider/settings/backup/SecureSettings.java
+index ee8e8d342..34ed5979b 100644
+--- a/packages/SettingsProvider/src/android/provider/settings/backup/SecureSettings.java
++++ b/packages/SettingsProvider/src/android/provider/settings/backup/SecureSettings.java
+@@ -386,6 +386,7 @@ public class SecureSettings {
+         Settings.Secure.VPN_ENFORCE_DNS,
+         Settings.Secure.TETHERING_ALLOW_VPN_UPSTREAMS,
+         Settings.Secure.UI_NIGHT_MODE_DIM_WALL,
++        Settings.Secure.BERRY_BLACK_THEME,
+         Settings.Secure.UI_NIGHT_MODE_DIM_WALL_AMOUNT,
+         Settings.Secure.UI_NIGHT_LIGHT_DIM_WALL,
+         Settings.Secure.UI_NIGHT_LIGHT_DIM_WALL_AMOUNT,
+diff --git a/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java b/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java
+index 5fdb1dda7..53c9866f8 100644
+--- a/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java
++++ b/packages/SettingsProvider/src/android/provider/settings/backup/SystemSettings.java
+@@ -136,6 +136,9 @@ public class SystemSettings {
+                 Settings.System.OMNI_ADVANCED_REBOOT,
+                 Settings.System.QS_FOOTER_TEXT_SHOW,
+                 Settings.System.QS_FOOTER_TEXT_STRING,
++                Settings.System.QS_BRIGHTNESS_SLIDER_ROUND,
++                Settings.System.QS_TILES_CIRCULAR,
++                Settings.System.QS_TILES_CIRCULAR_SIZE,
+                 Settings.System.LOCKSCREEN_BATTERY_INFO,
+                 Settings.System.LOCKSCREEN_CHARGING_TIME,
+                 Settings.System.NETWORK_TRAFFIC_STATE,
+diff --git a/packages/SettingsProvider/src/android/provider/settings/validators/SecureSettingsValidators.java b/packages/SettingsProvider/src/android/provider/settings/validators/SecureSettingsValidators.java
+index 301b4ad78..02fbdd6ad 100644
+--- a/packages/SettingsProvider/src/android/provider/settings/validators/SecureSettingsValidators.java
++++ b/packages/SettingsProvider/src/android/provider/settings/validators/SecureSettingsValidators.java
+@@ -598,7 +598,7 @@ public class SecureSettingsValidators {
+         VALIDATORS.put(Secure.DC_DIM_AUTO_MODE, new DiscreteValueValidator(new String[] {"0", "1", "2", "3", "4"}));
+         VALIDATORS.put(Secure.DC_DIM_AUTO_TIME, TIME_RANGE_VALIDATOR);
+         VALIDATORS.put(Secure.DOZE_ON_CHARGE, BOOLEAN_VALIDATOR);
+-        VALIDATORS.put(Secure.QS_SHOW_BRIGHTNESS, BOOLEAN_VALIDATOR);
++        VALIDATORS.put(Secure.QS_SHOW_BRIGHTNESS, new InclusiveIntegerRangeValidator(0, 2));
+         VALIDATORS.put(Secure.QS_BRIGHTNESS_POSITION_BOTTOM, BOOLEAN_VALIDATOR);
+         VALIDATORS.put(Secure.QS_SHOW_AUTO_BRIGHTNESS_BUTTON, BOOLEAN_VALIDATOR);
+         VALIDATORS.put(Secure.DOZE_FOR_NOTIFICATIONS, BOOLEAN_VALIDATOR);
+@@ -629,6 +629,7 @@ public class SecureSettingsValidators {
+         VALIDATORS.put(Secure.VPN_ENFORCE_DNS, BOOLEAN_VALIDATOR);
+         VALIDATORS.put(Secure.VPN_ENFORCE_DNS_STORE, new DiscreteValueValidator(new String[] {"-1", "0", "1", "2"}));
+         VALIDATORS.put(Secure.UI_NIGHT_MODE_DIM_WALL, BOOLEAN_VALIDATOR);
++        VALIDATORS.put(Secure.BERRY_BLACK_THEME, BOOLEAN_VALIDATOR);
+         VALIDATORS.put(Secure.UI_NIGHT_MODE_DIM_WALL_AMOUNT, new InclusiveIntegerRangeValidator(1, 100));
+         VALIDATORS.put(Secure.UI_NIGHT_MODE_DIM_WALL_ACTIVATED, BOOLEAN_VALIDATOR);
+         VALIDATORS.put(Secure.UI_NIGHT_LIGHT_DIM_WALL, BOOLEAN_VALIDATOR);
+diff --git a/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java b/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java
+index b5cc92379..924535843 100644
+--- a/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java
++++ b/packages/SettingsProvider/src/android/provider/settings/validators/SystemSettingsValidators.java
+@@ -375,6 +375,15 @@ public class SystemSettingsValidators {
+         VALIDATORS.put(System.DC_DIM_ENABLED, BOOLEAN_VALIDATOR);
+         VALIDATORS.put(System.SHADE_BLUR_RADIUS, new InclusiveIntegerRangeValidator(5, 80));
+         VALIDATORS.put(System.SHADE_SCRIM_ALPHA, new InclusiveIntegerRangeValidator(0, 100));
++        for (String key : com.android.internal.util.lunaris.LunarisBarSettings.systemDefaults().keySet()) {
++            VALIDATORS.put(key, key.endsWith("_width_scale") || key.endsWith("_height_scale")
++                    ? new InclusiveIntegerRangeValidator(70, 140)
++                    : key.endsWith("_popup_color_mode")
++                            ? new InclusiveIntegerRangeValidator(0, 2) : BOOLEAN_VALIDATOR);
++        }
++        VALIDATORS.put(System.QS_BRIGHTNESS_SLIDER_ROUND, BOOLEAN_VALIDATOR);
++        VALIDATORS.put(System.QS_TILES_CIRCULAR, BOOLEAN_VALIDATOR);
++        VALIDATORS.put(System.QS_TILES_CIRCULAR_SIZE, new InclusiveIntegerRangeValidator(72, 80));
+         VALIDATORS.put(System.BATTERY_TEXT_ONLY, BOOLEAN_VALIDATOR);
+     }
+ }
+diff --git a/packages/SettingsProvider/test/src/android/provider/settings/validators/SettingsValidatorsTest.java b/packages/SettingsProvider/test/src/android/provider/settings/validators/SettingsValidatorsTest.java
+index a1e0a6d1a..567549624 100644
+--- a/packages/SettingsProvider/test/src/android/provider/settings/validators/SettingsValidatorsTest.java
++++ b/packages/SettingsProvider/test/src/android/provider/settings/validators/SettingsValidatorsTest.java
+@@ -47,6 +47,22 @@ import java.util.Map;
+ @SmallTest
+ public class SettingsValidatorsTest {
+ 
++    @Test
++    public void testBrightnessVisibilityAndPureBlackTheme() {
++        Validator visibility = SecureSettingsValidators.VALIDATORS.get(
++                Settings.Secure.QS_SHOW_BRIGHTNESS);
++        assertTrue(visibility.validate("0"));
++        assertTrue(visibility.validate("1"));
++        assertTrue(visibility.validate("2"));
++        assertFalse(visibility.validate("3"));
++        assertFalse(visibility.validate("-1"));
++        Validator pureBlack = SecureSettingsValidators.VALIDATORS.get(
++                Settings.Secure.BERRY_BLACK_THEME);
++        assertTrue(pureBlack.validate("0"));
++        assertTrue(pureBlack.validate("1"));
++        assertFalse(pureBlack.validate("2"));
++    }
++
+     @Test
+     public void testNonNegativeIntegerValidator() {
+         assertTrue(SettingsValidators.NON_NEGATIVE_INTEGER_VALIDATOR.validate("1"));
+diff --git a/packages/SystemUI/AndroidManifest.xml b/packages/SystemUI/AndroidManifest.xml
+index 12c48e7a2..4618bd7c0 100644
+--- a/packages/SystemUI/AndroidManifest.xml
++++ b/packages/SystemUI/AndroidManifest.xml
+@@ -1375,5 +1375,16 @@
+             android:exported="true"
+            />
+ 
++        <activity
++            android:name=".statusbar.featurepods.popups.ui.LunarisBarWidgetPickerActivity"
++            android:exported="true"
++            android:permission="android.permission.WRITE_SECURE_SETTINGS"
++            android:excludeFromRecents="true"
++            android:theme="@style/Theme.SystemUI.Dialog">
++            <intent-filter>
++                <action android:name="com.android.systemui.action.LUNARIS_BAR_WIDGET_PICKER" />
++                <category android:name="android.intent.category.DEFAULT" />
++            </intent-filter>
++        </activity>
+     </application>
+ </manifest>
+diff --git a/packages/SystemUI/multivalentTests/src/com/android/systemui/brightness/ui/viewmodel/BrightnessSliderViewModelTest.kt b/packages/SystemUI/multivalentTests/src/com/android/systemui/brightness/ui/viewmodel/BrightnessSliderViewModelTest.kt
+index 906036ac5..ebda7336b 100644
+--- a/packages/SystemUI/multivalentTests/src/com/android/systemui/brightness/ui/viewmodel/BrightnessSliderViewModelTest.kt
++++ b/packages/SystemUI/multivalentTests/src/com/android/systemui/brightness/ui/viewmodel/BrightnessSliderViewModelTest.kt
+@@ -16,6 +16,7 @@
+ 
+ package com.android.systemui.brightness.ui.viewmodel
+ 
++import android.provider.Settings
+ import android.graphics.drawable.Icon
+ import androidx.test.ext.junit.runners.AndroidJUnit4
+ import androidx.test.filters.SmallTest
+@@ -32,6 +33,7 @@ import com.android.systemui.coroutines.collectLastValue
+ import com.android.systemui.graphics.ImageLoader
+ import com.android.systemui.graphics.imageLoader
+ import com.android.systemui.haptics.slider.sliderHapticsViewModelFactory
++import com.android.systemui.shared.settings.data.repository.systemSettingsRepository
+ import com.android.systemui.kosmos.Kosmos
+ import com.android.systemui.kosmos.testScope
+ import com.android.systemui.lifecycle.activateIn
+@@ -70,6 +72,22 @@ class BrightnessSliderViewModelTest : SysuiTestCase() {
+         )
+     }
+ 
++    @Test
++    fun roundedSliderDefaultsOffAndTracksSettingChanges() =
++        with(kosmos) {
++            testScope.runTest {
++                underTest.activateIn(this)
++                runCurrent()
++                assertThat(underTest.roundedSlider).isFalse()
++                systemSettingsRepository.setInt(Settings.System.QS_BRIGHTNESS_SLIDER_ROUND, 1)
++                runCurrent()
++                assertThat(underTest.roundedSlider).isTrue()
++                systemSettingsRepository.setInt(Settings.System.QS_BRIGHTNESS_SLIDER_ROUND, 0)
++                runCurrent()
++                assertThat(underTest.roundedSlider).isFalse()
++            }
++        }
++
+     @Test
+     fun brightnessChangeInRepository_changeInFlow() =
+         with(kosmos) {
+@@ -272,6 +290,7 @@ class BrightnessSliderViewModelTest : SysuiTestCase() {
+             supportsMirror,
+             brightnessWarningToast,
+             imageLoader,
++            systemSettingsRepository,
+         )
+     }
+ }
+diff --git a/packages/SystemUI/multivalentTests/src/com/android/systemui/theme/ThemeOverlayControllerTest.java b/packages/SystemUI/multivalentTests/src/com/android/systemui/theme/ThemeOverlayControllerTest.java
+index 4783bd7f1..bd65e6ad1 100644
+--- a/packages/SystemUI/multivalentTests/src/com/android/systemui/theme/ThemeOverlayControllerTest.java
++++ b/packages/SystemUI/multivalentTests/src/com/android/systemui/theme/ThemeOverlayControllerTest.java
+@@ -1039,6 +1039,44 @@ public class ThemeOverlayControllerTest extends SysuiTestCase {
+         ).setResourceValue(any(String.class), eq(TYPE_INT_COLOR_ARGB8), anyInt(), eq(null));
+     }
+ 
++    @Test
++    public void pureBlackTheme_changesDarkBackgroundsAndRestoresPaletteWhenDisabled() {
++        when(mSecureSettings.getIntForUser(Settings.Secure.BERRY_BLACK_THEME, 0,
++                mUserTracker.getUserId())).thenReturn(1);
++        WallpaperColors colors = new WallpaperColors(Color.valueOf(Color.RED),
++                Color.valueOf(Color.BLUE), null);
++        mColorsListener.getValue().onColorsChanged(colors, WallpaperManager.FLAG_SYSTEM,
++                USER_SYSTEM);
++        ArgumentCaptor<FabricatedOverlay[]> overlays =
++                ArgumentCaptor.forClass(FabricatedOverlay[].class);
++        verify(mThemeOverlayApplier).applyCurrentUserOverlays(any(), overlays.capture(),
++                anyInt(), any(), any());
++        verify(overlays.getValue()[1]).setResourceValue(
++                "android:color/system_neutral1_900_dark", TYPE_INT_COLOR_ARGB8, Color.BLACK, null);
++        verify(overlays.getValue()[2]).setResourceValue(
++                "android:color/system_surface_container_dark", TYPE_INT_COLOR_ARGB8,
++                0xff171717, null);
++        verify(overlays.getValue()[2]).setResourceValue(
++                "android:color/system_surface_effect_1_dark", TYPE_INT_COLOR_ARGB8,
++                0xff171717, null);
++        verify(overlays.getValue()[2]).setResourceValue(
++                "android:color/system_background_dark", TYPE_INT_COLOR_ARGB8, Color.BLACK, null);
++        verify(overlays.getValue()[2], never()).setResourceValue(
++                "android:color/system_surface_container_light", TYPE_INT_COLOR_ARGB8,
++                Color.BLACK, null);
++
++        when(mSecureSettings.getIntForUser(Settings.Secure.BERRY_BLACK_THEME, 0,
++                mUserTracker.getUserId())).thenReturn(0);
++        when(mDeviceProvisionedController.isUserSetup(anyInt())).thenReturn(true);
++        clearInvocations(mThemeOverlayApplier);
++        mSettingsObserver.getValue().onChange(false, null, 0, mUserTracker.getUserId());
++        verify(mThemeOverlayApplier).applyCurrentUserOverlays(any(), overlays.capture(),
++                anyInt(), any(), any());
++        verify(overlays.getValue()[2], never()).setResourceValue(
++                "android:color/system_surface_container_dark", TYPE_INT_COLOR_ARGB8,
++                Color.BLACK, null);
++    }
++
+     private enum TestColorSource {
+         preset,
+         home_wallpaper,
+diff --git a/packages/SystemUI/res/values-sw600dp/shade_dimens.xml b/packages/SystemUI/res/values-sw600dp/shade_dimens.xml
+index b2ab18589..b48512aed 100644
+--- a/packages/SystemUI/res/values-sw600dp/shade_dimens.xml
++++ b/packages/SystemUI/res/values-sw600dp/shade_dimens.xml
+@@ -52,6 +52,12 @@
+     <dimen
+         name="common_tile_default_toggle_target_size"
+         android:featureFlag="com.android.systemui.desktop_sizing">44dp</dimen>
++    <dimen
++        name="common_tile_circular_tile_height"
++        android:featureFlag="com.android.systemui.desktop_sizing">@dimen/common_tile_default_tile_height</dimen>
++    <dimen
++        name="common_tile_circular_toggle_target_size"
++        android:featureFlag="com.android.systemui.desktop_sizing">@dimen/common_tile_default_toggle_target_size</dimen>
+ 
+     <!-- QS shade overlay brightness bar -->
+     <dimen
+diff --git a/packages/SystemUI/res/values/shade_dimens.xml b/packages/SystemUI/res/values/shade_dimens.xml
+index 01ba1d035..7d2ddd53d 100644
+--- a/packages/SystemUI/res/values/shade_dimens.xml
++++ b/packages/SystemUI/res/values/shade_dimens.xml
+@@ -38,6 +38,8 @@
+     <dimen name="common_tile_default_start_padding">8dp</dimen>
+     <dimen name="common_tile_default_tile_height">72dp</dimen>
+     <dimen name="common_tile_default_toggle_target_size">56dp</dimen>
++    <dimen name="common_tile_circular_tile_height">80dp</dimen>
++    <dimen name="common_tile_circular_toggle_target_size">62dp</dimen>
+ 
+     <!-- QS shade overlay brightness bar -->
+     <dimen name="overlay_qs_layout_brightness_icon_size">28dp</dimen>
+diff --git a/packages/SystemUI/src/com/android/systemui/brightness/ui/compose/BrightnessSlider.kt b/packages/SystemUI/src/com/android/systemui/brightness/ui/compose/BrightnessSlider.kt
+index fa94cbaf2..bc3ce2760 100644
+--- a/packages/SystemUI/src/com/android/systemui/brightness/ui/compose/BrightnessSlider.kt
++++ b/packages/SystemUI/src/com/android/systemui/brightness/ui/compose/BrightnessSlider.kt
+@@ -99,6 +99,7 @@ import androidx.compose.ui.res.stringResource
+ import androidx.compose.ui.semantics.semantics
+ import androidx.compose.ui.semantics.text
+ import androidx.compose.ui.text.AnnotatedString
++import androidx.compose.ui.unit.Constraints
+ import androidx.compose.ui.unit.Dp
+ import androidx.compose.ui.unit.DpSize
+ import androidx.compose.ui.unit.LayoutDirection
+@@ -155,6 +156,7 @@ fun BrightnessSlider(
+     showToast: () -> Unit = {},
+     hapticsViewModelFactory: SliderHapticsViewModel.Factory,
+     dimensions: BrightnessSliderDimensions = BrightnessSliderDimensions.Default,
++    roundedSlider: Boolean = false,
+ ) {
+     val context = LocalContext.current
+     val cr = context.contentResolver
+@@ -339,92 +341,138 @@ fun BrightnessSlider(
+                     },
+             interactionSource = interactionSource,
+             thumb = {
+-                SliderDefaults.Thumb(
+-                    interactionSource = interactionSource,
+-                    enabled = enabled,
+-                    thumbSize = DpSize(dimensions.thumbWidth, dimensions.thumbHeight),
+-                    colors = colors,
+-                )
+-            },
+-            track = { sliderState ->
+-                var showIconActive by remember { mutableStateOf(true) }
+-                val iconActiveAlphaAnimatable = remember {
+-                    Animatable(
+-                        initialValue = 1f,
+-                        typeConverter = Float.VectorConverter,
+-                        label = "iconActiveAlpha",
++                if (roundedSlider) {
++                    Box(Modifier.size(56.dp))
++                } else {
++                    SliderDefaults.Thumb(
++                        interactionSource = interactionSource,
++                        enabled = enabled,
++                        thumbSize = DpSize(dimensions.thumbWidth, dimensions.thumbHeight),
++                        colors = colors,
+                     )
+                 }
++            },
++            track = { sliderState ->
++                if (roundedSlider) {
++                    val thumbSize = 56.dp
++                    val density = LocalDensity.current
++                    val activeColor = MaterialTheme.colorScheme.primary
++                    val inactiveColor = LocalAndroidColorScheme.current.surfaceEffect2
++                    Layout(
++                        modifier = Modifier.fillMaxWidth().height(thumbSize),
++                        content = {
++                            Box(Modifier.background(inactiveColor, RoundedCornerShape(thumbSize / 2)))
++                            Box(
++                                Modifier.clip(RoundedCornerShape(thumbSize / 2)).background(activeColor),
++                                contentAlignment = Alignment.CenterEnd,
++                            ) {
++                                Box(Modifier.size(thumbSize), contentAlignment = Alignment.Center) {
++                                    Icon(
++                                        painter = painter,
++                                        contentDescription = null,
++                                        modifier = Modifier.size(iconSize),
++                                        tint = activeIconColor,
++                                    )
++                                }
++                            }
++                        },
++                    ) { measurables, constraints ->
++                        val thumbPx = with(density) { thumbSize.roundToPx() }
++                        val trackWidth = constraints.maxWidth
++                        val totalWidth = trackWidth + thumbPx
++                        val activeWidth =
++                            (sliderState.coercedValueAsFraction * trackWidth).toInt() + thumbPx
++                        val inactive = measurables[0].measure(Constraints.fixed(totalWidth, thumbPx))
++                        val active = measurables[1].measure(
++                            Constraints.fixed(activeWidth.coerceAtMost(totalWidth), thumbPx)
++                        )
++                        // Material reserves the thumb width and insets the track by half of it.
++                        // Keep that measured width; extend only the rounded children to the edges.
++                        layout(trackWidth, thumbPx) {
++                            inactive.placeRelative(-thumbPx / 2, 0)
++                            active.placeRelative(-thumbPx / 2, 0)
++                        }
++                    }
++                } else {
++                    var showIconActive by remember { mutableStateOf(true) }
++                    val iconActiveAlphaAnimatable = remember {
++                        Animatable(
++                            initialValue = 1f,
++                            typeConverter = Float.VectorConverter,
++                            label = "iconActiveAlpha",
++                        )
++                    }
+ 
+-                val iconInactiveAlphaAnimatable = remember {
+-                    Animatable(
+-                        initialValue = 0f,
+-                        typeConverter = Float.VectorConverter,
+-                        label = "iconInactiveAlpha",
+-                    )
+-                }
++                    val iconInactiveAlphaAnimatable = remember {
++                        Animatable(
++                            initialValue = 0f,
++                            typeConverter = Float.VectorConverter,
++                            label = "iconInactiveAlpha",
++                        )
++                    }
+ 
+-                LaunchedEffect(iconActiveAlphaAnimatable, iconInactiveAlphaAnimatable, showIconActive) {
+-                    if (showIconActive) {
+-                        launch { iconActiveAlphaAnimatable.appear() }
+-                        launch { iconInactiveAlphaAnimatable.disappear() }
+-                    } else {
+-                        launch { iconActiveAlphaAnimatable.disappear() }
+-                        launch { iconInactiveAlphaAnimatable.appear() }
++                    LaunchedEffect(iconActiveAlphaAnimatable, iconInactiveAlphaAnimatable, showIconActive) {
++                        if (showIconActive) {
++                            launch { iconActiveAlphaAnimatable.appear() }
++                            launch { iconInactiveAlphaAnimatable.disappear() }
++                        } else {
++                            launch { iconActiveAlphaAnimatable.disappear() }
++                            launch { iconInactiveAlphaAnimatable.appear() }
++                        }
+                     }
+-                }
+ 
+-                SliderDefaults.Track(
+-                    sliderState = sliderState,
+-                    modifier =
+-                        Modifier.motionTestValues {
+-                                iconActiveAlphaAnimatable.value exportAs
+-                                    BrightnessSliderMotionTestKeys.ActiveIconAlpha
+-                                iconInactiveAlphaAnimatable.value exportAs
+-                                    BrightnessSliderMotionTestKeys.InactiveIconAlpha
+-                            }
+-                            .height(dimensions.trackHeight)
+-                            .drawWithContent {
+-                                drawContent()
+-
+-                                val yOffset = size.height / 2 - iconSize.toSize().height / 2
+-                                val activeTrackStart = 0f
+-                                val activeTrackEnd =
+-                                    size.width * sliderState.coercedValueAsFraction -
+-                                        ThumbTrackGapSize.toPx()
+-                                val inactiveTrackStart = activeTrackEnd + ThumbTrackGapSize.toPx() * 2
+-                                val inactiveTrackEnd = size.width
+-
+-                                val activeTrackWidth = activeTrackEnd - activeTrackStart
+-                                val inactiveTrackWidth = inactiveTrackEnd - inactiveTrackStart
+-
+-                                if (
+-                                    iconSize.toSize().width <
+-                                        inactiveTrackWidth - IconPadding.toPx() * 2
+-                                ) {
+-                                    showIconActive = false
+-                                    trackIcon(
+-                                        Offset(inactiveTrackEnd, yOffset),
+-                                        inactiveIconColor,
+-                                        iconInactiveAlphaAnimatable.value,
+-                                    )
+-                                } else if (
+-                                    iconSize.toSize().width < activeTrackWidth - IconPadding.toPx() * 2
+-                                ) {
+-                                    showIconActive = true
+-                                    trackIcon(
+-                                        Offset(activeTrackEnd, yOffset),
+-                                        activeIconColor,
+-                                        iconActiveAlphaAnimatable.value,
+-                                    )
++                    SliderDefaults.Track(
++                        sliderState = sliderState,
++                        modifier =
++                            Modifier.motionTestValues {
++                                    iconActiveAlphaAnimatable.value exportAs
++                                        BrightnessSliderMotionTestKeys.ActiveIconAlpha
++                                    iconInactiveAlphaAnimatable.value exportAs
++                                        BrightnessSliderMotionTestKeys.InactiveIconAlpha
+                                 }
+-                            },
+-                    trackCornerSize = SliderTrackRoundedCorner,
+-                    trackInsideCornerSize = 2.dp,
+-                    drawStopIndicator = null,
+-                    thumbTrackGapSize = ThumbTrackGapSize,
+-                    colors = colors,
+-                )
++                                .height(dimensions.trackHeight)
++                                .drawWithContent {
++                                    drawContent()
++
++                                    val yOffset = size.height / 2 - iconSize.toSize().height / 2
++                                    val activeTrackStart = 0f
++                                    val activeTrackEnd =
++                                        size.width * sliderState.coercedValueAsFraction -
++                                            ThumbTrackGapSize.toPx()
++                                    val inactiveTrackStart = activeTrackEnd + ThumbTrackGapSize.toPx() * 2
++                                    val inactiveTrackEnd = size.width
++
++                                    val activeTrackWidth = activeTrackEnd - activeTrackStart
++                                    val inactiveTrackWidth = inactiveTrackEnd - inactiveTrackStart
++
++                                    if (
++                                        iconSize.toSize().width <
++                                            inactiveTrackWidth - IconPadding.toPx() * 2
++                                    ) {
++                                        showIconActive = false
++                                        trackIcon(
++                                            Offset(inactiveTrackEnd, yOffset),
++                                            inactiveIconColor,
++                                            iconInactiveAlphaAnimatable.value,
++                                        )
++                                    } else if (
++                                        iconSize.toSize().width < activeTrackWidth - IconPadding.toPx() * 2
++                                    ) {
++                                        showIconActive = true
++                                        trackIcon(
++                                            Offset(activeTrackEnd, yOffset),
++                                            activeIconColor,
++                                            iconActiveAlphaAnimatable.value,
++                                        )
++                                    }
++                                },
++                        trackCornerSize = SliderTrackRoundedCorner,
++                        trackInsideCornerSize = 2.dp,
++                        drawStopIndicator = null,
++                        thumbTrackGapSize = ThumbTrackGapSize,
++                        colors = colors,
++                    )
++                }
+             },
+         )
+ 
+@@ -466,8 +514,8 @@ fun BrightnessSlider(
+                     }
+                 },
+                 modifier = Modifier
+-                    .size(45.dp)
+-                    .clip(RoundedCornerShape(CornerSize(SliderTrackRoundedCorner)))
++                    .size(if (roundedSlider) 56.dp else 45.dp)
++                    .clip(if (roundedSlider) CircleShape else RoundedCornerShape(CornerSize(SliderTrackRoundedCorner)))
+                     .background(autoBrightnessBackgroundColor),
+                 update = { button ->
+                     val targetState =
+@@ -536,6 +584,16 @@ private fun Modifier.sliderBackground(
+     }
+ }
+ 
++private fun Modifier.sliderBackgroundRound(color: Color) = drawWithCache {
++    val frame = 8.dp.toPx()
++    val offset = Offset(-frame, -frame)
++    val expandedSize = Size(size.width + 2 * frame, size.height + 2 * frame)
++    val radius = CornerRadius(frame + size.height / 2)
++    onDrawBehind {
++        drawRoundRect(color = color, topLeft = offset, size = expandedSize, cornerRadius = radius)
++    }
++}
++
+ @Composable
+ fun BrightnessSliderContainer(
+     viewModel: BrightnessSliderViewModel,
+@@ -543,6 +601,7 @@ fun BrightnessSliderContainer(
+     containerColors: ContainerColors,
+     dimensions: BrightnessSliderDimensions = BrightnessSliderDimensions.Default,
+ ) {
++    val roundedSlider = viewModel.roundedSlider
+     val gamma = viewModel.currentBrightness.value
+     if (gamma == BrightnessSliderViewModel.initialValue.value) { // Ignore initial negative value.
+         return
+@@ -583,7 +642,9 @@ fun BrightnessSliderContainer(
+     Box(
+         modifier =
+             modifier
+-                .padding(vertical = { dimensions.verticalPadding.roundToPx() })
++                .padding(vertical = { (dimensions.verticalPadding +
++                    if (roundedSlider) (dimensions.thumbHeight - dimensions.trackHeight).coerceAtLeast(0.dp) / 2
++                    else 0.dp).roundToPx() })
+                 .fillMaxWidth()
+                 .sysuiResTag("brightness_slider")
+     ) {
+@@ -610,13 +671,16 @@ fun BrightnessSliderContainer(
+             modifier =
+                 Modifier.borderOnFocus(
+                         color = MaterialTheme.colorScheme.secondary,
+-                        cornerSize = CornerSize(SliderTrackRoundedCorner),
++                        cornerSize = CornerSize(if (roundedSlider) 32.dp else SliderTrackRoundedCorner),
+                     )
+                     .then(if (viewModel.showMirror) Modifier.drawInOverlay() else Modifier)
+-                    .sliderBackground(
+-                        DpSize(dimensions.backgroundFrameWidth, dimensions.backgroundFrameHeight),
+-                        dimensions.backgroundRoundedCorner,
+-                        containerColor,
++                    .then(
++                        if (roundedSlider) Modifier.sliderBackgroundRound(containerColor)
++                        else Modifier.sliderBackground(
++                            DpSize(dimensions.backgroundFrameWidth, dimensions.backgroundFrameHeight),
++                            dimensions.backgroundRoundedCorner,
++                            containerColor,
++                        )
+                     )
+                     .fillMaxWidth()
+                     .pointerInteropFilter {
+@@ -637,6 +701,7 @@ fun BrightnessSliderContainer(
+                 )
+             },
+             dimensions = dimensions,
++            roundedSlider = roundedSlider,
+         )
+     }
+ }
+diff --git a/packages/SystemUI/src/com/android/systemui/brightness/ui/viewmodel/BrightnessSliderViewModel.kt b/packages/SystemUI/src/com/android/systemui/brightness/ui/viewmodel/BrightnessSliderViewModel.kt
+index 75d4c7cda..bf7c3c0cb 100644
+--- a/packages/SystemUI/src/com/android/systemui/brightness/ui/viewmodel/BrightnessSliderViewModel.kt
++++ b/packages/SystemUI/src/com/android/systemui/brightness/ui/viewmodel/BrightnessSliderViewModel.kt
+@@ -16,6 +16,8 @@
+ 
+ package com.android.systemui.brightness.ui.viewmodel
+ 
++import android.provider.Settings
++import com.android.systemui.shared.settings.data.repository.SystemSettingsRepository
+ import android.content.Context
+ import androidx.annotation.DrawableRes
+ import androidx.annotation.FloatRange
+@@ -62,6 +64,7 @@ constructor(
+     @Assisted val supportsMirroring: Boolean,
+     private val brightnessWarningToast: BrightnessWarningToast,
+     private val imageLoader: ImageLoader,
++    systemSettingsRepository: SystemSettingsRepository,
+ ) : HydratedActivatable() {
+ 
+     init {
+@@ -71,6 +74,10 @@ constructor(
+         }
+     }
+ 
++    val roundedSlider by systemSettingsRepository
++        .boolSetting(Settings.System.QS_BRIGHTNESS_SLIDER_ROUND, false)
++        .hydratedStateOf("roundedSlider", false)
++
+     val currentBrightness by
+         screenBrightnessInteractor.gammaBrightness.hydratedStateOf(initialValue)
+ 
+diff --git a/packages/SystemUI/src/com/android/systemui/dagger/SystemUIModule.java b/packages/SystemUI/src/com/android/systemui/dagger/SystemUIModule.java
+index a55bc2d02..5f300e5e0 100644
+--- a/packages/SystemUI/src/com/android/systemui/dagger/SystemUIModule.java
++++ b/packages/SystemUI/src/com/android/systemui/dagger/SystemUIModule.java
+@@ -308,6 +308,7 @@ import kotlinx.coroutines.CoroutineScope;
+         StatusBarFeaturePodsModule.class,
+         StatusBarModule.class,
+         StatusBarChipsModule.class,
++        com.android.systemui.statusbar.featurepods.av.AvControlsChipModule.class,
+         StatusBarPipelineModule.class,
+         StatusBarPolicyModule.class,
+         StatusBarRegionSamplingInteractorModule.class,
+diff --git a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/EditMode.kt b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/EditMode.kt
+index e990d9d11..e794ccc37 100644
+--- a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/EditMode.kt
++++ b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/EditMode.kt
+@@ -34,14 +34,16 @@ fun EditMode(viewModel: EditModeViewModel, modifier: Modifier = Modifier) {
+ 
+     DisposableEffect(Unit) { onDispose { viewModel.stopEditing() } }
+ 
+-    Column(modifier) {
+-        gridLayout.EditTileGrid(
+-            tiles,
+-            Modifier,
+-            viewModel::addTile,
+-            viewModel::removeTile,
+-            viewModel::setTiles,
+-            viewModel::stopEditing,
+-        )
++    CircularQsTileSettings(viewModel.systemSettings) {
++        Column(modifier) {
++            gridLayout.EditTileGrid(
++                tiles,
++                Modifier,
++                viewModel::addTile,
++                viewModel::removeTile,
++                viewModel::setTiles,
++                viewModel::stopEditing,
++            )
++        }
+     }
+ }
+diff --git a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/QuickQuickSettings.kt b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/QuickQuickSettings.kt
+index 84abda679..57551947f 100644
+--- a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/QuickQuickSettings.kt
++++ b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/QuickQuickSettings.kt
+@@ -48,44 +48,46 @@ fun ContentScope.QuickQuickSettings(
+     val squishiness by viewModel.squishinessViewModel.squishiness.collectAsStateWithLifecycle()
+     val scope = rememberCoroutineScope()
+ 
+-    Box(modifier = modifier) {
+-        GridAnchor()
++    CircularQsTileSettings(viewModel.systemSettings) {
++        Box(modifier = modifier) {
++            GridAnchor()
+ 
+-        val bounceables =
+-            remember(sizedTiles) { List(sizedTiles.size) { BounceableTileViewModel() } }
+-        val spans by remember(sizedTiles) { derivedStateOf { sizedTiles.fastMap { it.width } } }
+-        VerticalSpannedGrid(
+-            columns = columns,
+-            columnSpacing = dimensionResource(R.dimen.qs_tile_margin_horizontal),
+-            rowSpacing = dimensionResource(R.dimen.qs_tile_margin_vertical),
+-            spans = spans,
+-            modifier = Modifier.sysuiResTag("qqs_tile_layout"),
+-            keys = { sizedTiles[it].tile.spec },
+-        ) { spanIndex, column, isFirstInColumn, isLastInColumn ->
+-            val it = sizedTiles[spanIndex]
+-            Element(it.tile.spec.toElementKey(), Modifier) {
+-                Tile(
+-                    tile = it.tile,
+-                    iconOnly = it.isIcon,
+-                    squishiness = { squishiness },
+-                    coroutineScope = scope,
+-                    bounceableInfo =
+-                        bounceables.bounceableInfo(
+-                            it,
+-                            index = spanIndex,
+-                            column = column,
+-                            columns = columns,
+-                            isFirstInRow = isFirstInColumn,
+-                            isLastInRow = isLastInColumn,
+-                        ),
+-                    tileHapticsViewModelFactory = viewModel.tileHapticsViewModelFactory,
+-                    // There should be no QuickQuickSettings when the details view is enabled.
+-                    detailsViewModel = null,
+-                    isVisible = listening,
+-                )
++            val bounceables =
++                remember(sizedTiles) { List(sizedTiles.size) { BounceableTileViewModel() } }
++            val spans by remember(sizedTiles) { derivedStateOf { sizedTiles.fastMap { it.width } } }
++            VerticalSpannedGrid(
++                columns = columns,
++                columnSpacing = dimensionResource(R.dimen.qs_tile_margin_horizontal),
++                rowSpacing = dimensionResource(R.dimen.qs_tile_margin_vertical),
++                spans = spans,
++                modifier = Modifier.sysuiResTag("qqs_tile_layout"),
++                keys = { sizedTiles[it].tile.spec },
++            ) { spanIndex, column, isFirstInColumn, isLastInColumn ->
++                val it = sizedTiles[spanIndex]
++                Element(it.tile.spec.toElementKey(), Modifier) {
++                    Tile(
++                        tile = it.tile,
++                        iconOnly = it.isIcon,
++                        squishiness = { squishiness },
++                        coroutineScope = scope,
++                        bounceableInfo =
++                            bounceables.bounceableInfo(
++                                it,
++                                index = spanIndex,
++                                column = column,
++                                columns = columns,
++                                isFirstInRow = isFirstInColumn,
++                                isLastInRow = isLastInColumn,
++                            ),
++                        tileHapticsViewModelFactory = viewModel.tileHapticsViewModelFactory,
++                        // There should be no QuickQuickSettings when the details view is enabled.
++                        detailsViewModel = null,
++                        isVisible = listening,
++                    )
++                }
+             }
+         }
+-    }
+ 
+-    TileListener(tiles, listening)
++        TileListener(tiles, listening)
++    }
+ }
+diff --git a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/TileGrid.kt b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/TileGrid.kt
+index aebcc1c78..ad76ec78f 100644
+--- a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/TileGrid.kt
++++ b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/TileGrid.kt
+@@ -35,12 +35,14 @@ fun ContentScope.TileGrid(
+ ) {
+     val gridLayout = viewModel.gridLayout
+     val tiles = viewModel.tileViewModels
+-    with(gridLayout) {
+-        TileGrid(
+-            tiles = tiles,
+-            modifier = modifier,
+-            listening = listening,
+-            enableRevealEffect = enableRevealEffect,
+-        )
++    CircularQsTileSettings(viewModel.systemSettings) {
++        with(gridLayout) {
++            TileGrid(
++                tiles = tiles,
++                modifier = modifier,
++                listening = listening,
++                enableRevealEffect = enableRevealEffect,
++            )
++        }
+     }
+ }
+diff --git a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/infinitegrid/CommonTile.kt b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/infinitegrid/CommonTile.kt
+index 6db03f5f1..3d7e79a3f 100644
+--- a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/infinitegrid/CommonTile.kt
++++ b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/infinitegrid/CommonTile.kt
+@@ -21,6 +21,7 @@ import android.graphics.drawable.Animatable
+ import android.graphics.drawable.AnimatedVectorDrawable
+ import android.graphics.drawable.Drawable
+ import android.text.TextUtils
++import androidx.annotation.DimenRes
+ import androidx.annotation.VisibleForTesting
+ import androidx.compose.animation.animateColorAsState
+ import androidx.compose.animation.graphics.res.animatedVectorResource
+@@ -88,6 +89,7 @@ import androidx.compose.ui.text.TextStyle
+ import androidx.compose.ui.unit.Dp
+ import androidx.compose.ui.unit.LayoutDirection
+ import androidx.compose.ui.unit.dp
++import androidx.compose.ui.unit.lerp
+ import com.android.compose.modifiers.size
+ import com.android.compose.modifiers.thenIf
+ import com.android.compose.ui.graphics.painter.rememberDrawablePainter
+@@ -428,12 +430,16 @@ object CommonTileDefaults {
+     val InactiveIconCornerRadius: Dp
+         @Composable
+         @ReadOnlyComposable
+-        get() = dimensionResource(id = R.dimen.common_tile_default_inactive_icon_corner_radius)
++        get() =
++            if (LocalUseCircularQsTileShapes.current) ToggleTargetSize / 2
++            else dimensionResource(id = R.dimen.common_tile_default_inactive_icon_corner_radius)
+ 
+     val InactiveTileCornerRadius: Dp
+         @Composable
+         @ReadOnlyComposable
+-        get() = dimensionResource(id = R.dimen.common_tile_default_inactive_tile_corner_radius)
++        get() =
++            if (LocalUseCircularQsTileShapes.current) TileHeight / 2
++            else dimensionResource(id = R.dimen.common_tile_default_inactive_tile_corner_radius)
+ 
+     /** Dimensions for focus rings with wide corners */
+     val TileDetailsEntryWideCornerRadius: Dp
+@@ -477,12 +483,31 @@ object CommonTileDefaults {
+     val TileHeight: Dp
+         @Composable
+         @ReadOnlyComposable
+-        get() = dimensionResource(id = R.dimen.common_tile_default_tile_height)
++        get() =
++            circularTileDimension(
++                R.dimen.common_tile_default_tile_height,
++                R.dimen.common_tile_circular_tile_height,
++            )
+ 
+     val ToggleTargetSize: Dp
+         @Composable
+         @ReadOnlyComposable
+-        get() = dimensionResource(id = R.dimen.common_tile_default_toggle_target_size)
++        get() =
++            circularTileDimension(
++                R.dimen.common_tile_default_toggle_target_size,
++                R.dimen.common_tile_circular_toggle_target_size,
++            )
++
++    @Composable
++    @ReadOnlyComposable
++    private fun circularTileDimension(@DimenRes defaultId: Int, @DimenRes largeId: Int): Dp {
++        val defaultSize = dimensionResource(defaultId)
++        if (!LocalUseCircularQsTileShapes.current) return defaultSize
++
++        val fraction = (LocalCircularQsTileSize.current.coerceIn(72, 80) - 72) / 8f
++        // Read both endpoints from resources to preserve compact desktop dimensions.
++        return lerp(defaultSize, dimensionResource(largeId), fraction)
++    }
+ 
+     val SideIconWidth = 32.dp
+     val SideIconHeight = 20.dp
+diff --git a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/infinitegrid/EditTile.kt b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/infinitegrid/EditTile.kt
+index 128c6e53d..212a4924b 100644
+--- a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/infinitegrid/EditTile.kt
++++ b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/infinitegrid/EditTile.kt
+@@ -56,6 +56,7 @@ import androidx.compose.foundation.layout.Row
+ import androidx.compose.foundation.layout.RowScope
+ import androidx.compose.foundation.layout.Spacer
+ import androidx.compose.foundation.layout.WindowInsets
++import androidx.compose.foundation.layout.aspectRatio
+ import androidx.compose.foundation.layout.consumeWindowInsets
+ import androidx.compose.foundation.layout.displayCutout
+ import androidx.compose.foundation.layout.fillMaxHeight
+@@ -69,6 +70,8 @@ import androidx.compose.foundation.layout.size
+ import androidx.compose.foundation.layout.statusBarsPadding
+ import androidx.compose.foundation.layout.systemBars
+ import androidx.compose.foundation.layout.windowInsetsBottomHeight
++import androidx.compose.foundation.layout.widthIn
++import androidx.compose.foundation.layout.wrapContentSize
+ import androidx.compose.foundation.layout.wrapContentHeight
+ import androidx.compose.foundation.lazy.grid.GridCells
+ import androidx.compose.foundation.lazy.grid.LazyGridItemScope
+@@ -861,12 +864,20 @@ fun LazyGridScope.EditTiles(
+         span = { _, item -> item.span },
+         contentType = { _, _ -> TileType },
+     ) { index, cell ->
++        val tileHeight = TileHeight
+         when (cell) {
+             is TileGridCell ->
+                 if (listState.isMoving(cell.tile.tileSpec)) {
+                     // If the tile is being moved, replace it with a visible spacer
+                     SpacerGridCell(
+-                        Modifier.background(
++                        Modifier.thenIf(LocalUseCircularQsTileShapes.current && cell.isIcon) {
++                                Modifier.fillMaxWidth()
++                                    .height(tileHeight)
++                                    .wrapContentSize(Alignment.Center)
++                                    .widthIn(max = tileHeight)
++                                    .aspectRatio(1f)
++                            }
++                            .background(
+                             color =
+                                 MaterialTheme.colorScheme.secondary.copy(
+                                     alpha = EditModeTileDefaults.PLACEHOLDER_ALPHA
+@@ -1140,6 +1151,8 @@ private fun AvailableTileGridCell(
+     val clickLabel =
+         stringResource(id = R.string.accessibility_qs_edit_named_tile_add_action, cell.label.text)
+ 
++    val tileHeight = TileHeight
++
+     // Displays the tile as an icon tile with the label underneath
+     Column(
+         horizontalAlignment = Alignment.CenterHorizontally,
+@@ -1177,6 +1190,11 @@ private fun AvailableTileGridCell(
+             Box(
+                 Modifier.then(draggableModifier)
+                     .fillMaxSize()
++                    .thenIf(LocalUseCircularQsTileShapes.current) {
++                        Modifier.wrapContentSize(Alignment.Center)
++                            .widthIn(max = tileHeight)
++                            .aspectRatio(1f)
++                    }
+                     .borderOnFocus(
+                         MaterialTheme.colorScheme.secondary,
+                         CornerSize(InactiveTileCornerRadius),
+@@ -1281,6 +1299,8 @@ fun EditTile(
+     val defaultStartPadding = CommonTileDefaults.StartPadding
+     val iconSizeDiff = CommonTileDefaults.SmallTileIconSize - CommonTileDefaults.LargeTileIconSize
+     val toggleTargetSize = ToggleTargetSize
++    val circular = LocalUseCircularQsTileShapes.current
++    val tileHeight = TileHeight
+     Row(
+         horizontalArrangement = spacedBy(6.dp),
+         verticalAlignment = Alignment.CenterVertically,
+@@ -1311,7 +1331,9 @@ fun EditTile(
+                                 min?.let {
+                                     iconHorizontalCenter(
+                                         padding = defaultStartPadding,
+-                                        containerSize = it.roundToInt(),
++                                        containerSize =
++                                            if (circular) minOf(it, tileHeight.toPx()).roundToInt()
++                                            else it.roundToInt(),
+                                         toggleTargetSize = toggleTargetSize,
+                                     )
+                                 } ?: 0f
+diff --git a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/infinitegrid/Tile.kt b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/infinitegrid/Tile.kt
+index 2d6145d17..648fae18f 100644
+--- a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/infinitegrid/Tile.kt
++++ b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/infinitegrid/Tile.kt
+@@ -36,15 +36,19 @@ import androidx.compose.foundation.layout.Arrangement
+ import androidx.compose.foundation.layout.Arrangement.spacedBy
+ import androidx.compose.foundation.layout.Box
+ import androidx.compose.foundation.layout.BoxScope
++import androidx.compose.foundation.layout.aspectRatio
+ import androidx.compose.foundation.layout.fillMaxWidth
+ import androidx.compose.foundation.layout.height
+ import androidx.compose.foundation.layout.size
++import androidx.compose.foundation.layout.widthIn
++import androidx.compose.foundation.layout.wrapContentSize
+ import androidx.compose.foundation.shape.CornerSize
+ import androidx.compose.foundation.shape.RoundedCornerShape
+ import androidx.compose.material3.MaterialTheme
+ import androidx.compose.runtime.Composable
+ import androidx.compose.runtime.ReadOnlyComposable
+ import androidx.compose.runtime.State
++import androidx.compose.runtime.compositionLocalOf
+ import androidx.compose.runtime.getValue
+ import androidx.compose.runtime.mutableStateOf
+ import androidx.compose.runtime.produceState
+@@ -93,6 +97,7 @@ import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults
+ import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults.InactiveIconCornerRadius
+ import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults.InactiveTileCornerRadius
+ import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults.TileHeight
++import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults.ToggleTargetSize
+ import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults.longPressLabelMoreDetails
+ import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults.longPressLabelSettings
+ import com.android.systemui.qs.panels.ui.viewmodel.AccessibilityUiState
+@@ -114,6 +119,9 @@ import platform.test.motion.compose.values.motionTestValues
+ private val TileViewModel.traceName
+     get() = spec.toString().takeLast(Trace.MAX_SECTION_NAME_LEN)
+ 
++internal val LocalUseCircularQsTileShapes = compositionLocalOf { false }
++internal val LocalCircularQsTileSize = compositionLocalOf { 72 }
++
+ /**
+  * This composable function is responsible for rendering a tile based on the provided
+  * [TileViewModel]. It handles different states of the tile (e.g., available, unavailable),
+@@ -177,6 +185,8 @@ fun ContentScope.Tile(
+ 
+         // TODO(b/361789146): Draw the shapes instead of clipping
+         val tileShape by TileDefaults.animateTileShapeAsState(uiState)
++        val circularIconTile = LocalUseCircularQsTileShapes.current && iconOnly
++        val tileHeight = TileHeight
+         val animatedColor by animateColorAsState(colors.background, label = "QSTileBackgroundColor")
+         val isDualTarget = uiState.handlesToggleClick
+         val interactionSource = remember { MutableInteractionSource() }
+@@ -226,6 +236,14 @@ fun ContentScope.Tile(
+                 hapticsViewModel = hapticsViewModel,
+                 modifier =
+                     modifier
++                        // Size the painted surface, keeping it centered in the full grid slot.
++                        .thenIf(circularIconTile) {
++                            Modifier.fillMaxWidth()
++                                .height(tileHeight)
++                                .wrapContentSize(Alignment.Center)
++                                .widthIn(max = tileHeight)
++                                .aspectRatio(1f)
++                        }
+                         .then(surfaceRevealModifier)
+                         .borderOnFocus(
+                             color = MaterialTheme.colorScheme.secondary,
+@@ -609,6 +627,7 @@ private object TileDefaults {
+ 
+     @Composable
+     fun iconRadius(uiState: TileUiState): Dp {
++        if (LocalUseCircularQsTileShapes.current) return ToggleTargetSize / 2
+         return when (uiState.visualState) {
+             STATE_ACTIVE -> ActiveIconCornerRadius
+             STATE_INACTIVE -> InactiveIconCornerRadius
+@@ -618,6 +637,7 @@ private object TileDefaults {
+ 
+     @Composable
+     fun tileRadius(uiState: TileUiState): Dp {
++        if (LocalUseCircularQsTileShapes.current) return TileHeight / 2
+         return when (uiState.visualState) {
+             STATE_ACTIVE -> ActiveTileCornerRadius
+             STATE_INACTIVE -> InactiveTileCornerRadius
+diff --git a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/selection/Selection.kt b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/selection/Selection.kt
+index c0e3fe047..3137207be 100644
+--- a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/selection/Selection.kt
++++ b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/compose/selection/Selection.kt
+@@ -81,6 +81,8 @@ import com.android.systemui.compose.modifiers.sysuiResTag
+ import com.android.systemui.qs.flags.QsEditModeFocusFixes
+ import com.android.systemui.qs.flags.QsEditModeHoverFixes
+ import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults.InactiveTileCornerRadius
++import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults.TileHeight
++import com.android.systemui.qs.panels.ui.compose.infinitegrid.LocalUseCircularQsTileShapes
+ import com.android.systemui.qs.panels.ui.compose.selection.SelectionDefaults.BADGE_ANGLE_RAD
+ import com.android.systemui.qs.panels.ui.compose.selection.SelectionDefaults.BadgeIconSize
+ import com.android.systemui.qs.panels.ui.compose.selection.SelectionDefaults.BadgeSize
+@@ -339,14 +341,26 @@ private fun MinimumInteractiveSizeComponent(
+ 
+ @Composable
+ private fun Modifier.resizable(selected: Boolean, state: ResizingState): Modifier {
++    val circular = LocalUseCircularQsTileShapes.current
++    val tileHeight = TileHeight
+     return zIndex(if (selected) 2f else 1f).layout { measurable, constraints ->
+         // Grab the width from the resizing state regardless of if the tile is selected or not to
+         // animate undo actions
+         val width =
+             state.anchoredDraggableState.offset.takeIf { !it.isNaN() }?.roundToInt()
+                 ?: constraints.maxWidth
+-        val placeable = measurable.measure(constraints.copy(minWidth = width, maxWidth = width))
+-        layout(constraints.maxWidth, placeable.height) { placeable.placeRelative(0, 0) }
++        val iconWidth = state.bounds.first ?: constraints.maxWidth.toFloat()
++        val inset =
++            if (circular) {
++                (iconWidth - min(iconWidth, tileHeight.toPx())) * (1f - state.progress())
++            } else 0f
++        // Keep the grid slot and resize anchors intact while the painted circle grows into a pill.
++        val paintedWidth = (width - inset).roundToInt().coerceAtLeast(0)
++        val placeable =
++            measurable.measure(constraints.copy(minWidth = paintedWidth, maxWidth = paintedWidth))
++        layout(constraints.maxWidth, placeable.height) {
++            placeable.placeRelative((inset / 2f).roundToInt(), 0)
++        }
+     }
+ }
+ 
+diff --git a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/viewmodel/EditModeViewModel.kt b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/viewmodel/EditModeViewModel.kt
+index 0a216c894..d3664b3dd 100644
+--- a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/viewmodel/EditModeViewModel.kt
++++ b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/viewmodel/EditModeViewModel.kt
+@@ -31,6 +31,7 @@ import com.android.systemui.qs.panels.domain.interactor.GridLayoutTypeInteractor
+ import com.android.systemui.qs.panels.domain.interactor.TilesAvailabilityInteractor
+ import com.android.systemui.qs.panels.shared.model.GridLayoutType
+ import com.android.systemui.qs.panels.ui.compose.GridLayout
++import com.android.systemui.shared.settings.data.repository.SystemSettingsRepository
+ import com.android.systemui.qs.pipeline.domain.interactor.CurrentTilesInteractor
+ import com.android.systemui.qs.pipeline.domain.interactor.CurrentTilesInteractor.Companion.POSITION_AT_END
+ import com.android.systemui.qs.pipeline.domain.interactor.MinimumTilesInteractor
+@@ -72,6 +73,7 @@ constructor(
+     @Background private val bgDispatcher: CoroutineDispatcher,
+     gridLayoutTypeInteractor: GridLayoutTypeInteractor,
+     gridLayoutMap: Map<GridLayoutType, @JvmSuppressWildcards GridLayout>,
++    val systemSettings: SystemSettingsRepository,
+ ) {
+     private val _isEditing = MutableStateFlow(false)
+ 
+diff --git a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/viewmodel/QuickQuickSettingsViewModel.kt b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/viewmodel/QuickQuickSettingsViewModel.kt
+index f814fceae..60407bbe0 100644
+--- a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/viewmodel/QuickQuickSettingsViewModel.kt
++++ b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/viewmodel/QuickQuickSettingsViewModel.kt
+@@ -29,6 +29,7 @@ import com.android.systemui.qs.panels.shared.model.SizedTileImpl
+ import com.android.systemui.qs.panels.shared.model.splitInRowsSequence
+ import com.android.systemui.qs.pipeline.domain.interactor.CurrentTilesInteractor
+ import com.android.systemui.qs.pipeline.shared.TileSpec
++import com.android.systemui.shared.settings.data.repository.SystemSettingsRepository
+ import dagger.assisted.AssistedFactory
+ import dagger.assisted.AssistedInject
+ import kotlinx.coroutines.coroutineScope
+@@ -44,6 +45,7 @@ constructor(
+     val squishinessViewModel: TileSquishinessViewModel,
+     iconTilesViewModel: IconTilesViewModel,
+     val tileHapticsViewModelFactory: TileHapticsViewModel.Factory,
++    val systemSettings: SystemSettingsRepository,
+ ) : HydratedActivatable() {
+ 
+     private val qsColumnsViewModel = qsColumnsViewModelFactory.create(LOCATION_QQS, mediaUiBehavior)
+diff --git a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/viewmodel/TileGridViewModel.kt b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/viewmodel/TileGridViewModel.kt
+index f11ee30eb..cc98bfe3d 100644
+--- a/packages/SystemUI/src/com/android/systemui/qs/panels/ui/viewmodel/TileGridViewModel.kt
++++ b/packages/SystemUI/src/com/android/systemui/qs/panels/ui/viewmodel/TileGridViewModel.kt
+@@ -21,6 +21,7 @@ import com.android.systemui.qs.panels.domain.interactor.GridLayoutTypeInteractor
+ import com.android.systemui.qs.panels.shared.model.GridLayoutType
+ import com.android.systemui.qs.panels.ui.compose.GridLayout
+ import com.android.systemui.qs.pipeline.domain.interactor.CurrentTilesInteractor
++import com.android.systemui.shared.settings.data.repository.SystemSettingsRepository
+ import dagger.assisted.AssistedFactory
+ import dagger.assisted.AssistedInject
+ import javax.inject.Named
+@@ -33,6 +34,7 @@ constructor(
+     gridLayoutMap: Map<GridLayoutType, @JvmSuppressWildcards GridLayout>,
+     tilesInteractor: CurrentTilesInteractor,
+     @Named("Default") defaultGridLayout: GridLayout,
++    val systemSettings: SystemSettingsRepository,
+ ) : HydratedActivatable() {
+ 
+     val gridLayout by
+diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarViewController.java b/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarViewController.java
+index 01b80848c..31c6bfb34 100644
+--- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarViewController.java
++++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarViewController.java
+@@ -112,6 +112,8 @@ import javax.inject.Inject;
+ /** View Controller for {@link com.android.systemui.statusbar.phone.KeyguardStatusBarView}. */
+ public class KeyguardStatusBarViewController extends ViewController<KeyguardStatusBarView> {
+     private static final String TAG = "KeyguardStatusBarViewController";
++    private final com.android.systemui.statusbar.featurepods.popups.ui.binder.KeyguardDynamicIslandViewBinder
++            mLunarisBarViewBinder;
+     private static final AnimationProperties KEYGUARD_HUN_PROPERTIES =
+             new AnimationProperties().setDuration(StackStateAnimator.ANIMATION_DURATION_STANDARD);
+ 
+@@ -377,7 +379,9 @@ public class KeyguardStatusBarViewController extends ViewController<KeyguardStat
+             GoneToGlanceableHubTransitionViewModel goneToGlanceableHubTransitionViewModel,
+             OccludedToLockscreenTransitionViewModel occludedToLockscreenTransitionViewModel,
+             DreamViewModel dreamViewModel,
+-            KeyguardInteractor keyguardInteractor) {
++            KeyguardInteractor keyguardInteractor,
++            com.android.systemui.statusbar.featurepods.popups.ui.binder.KeyguardDynamicIslandViewBinder
++                    lunarisBarViewBinder) {
+         super(view);
+         mCoroutineDispatcher = dispatcher;
+         mContext = context;
+@@ -408,6 +412,7 @@ public class KeyguardStatusBarViewController extends ViewController<KeyguardStat
+         mOccludedToLockscreenTransitionViewModel = occludedToLockscreenTransitionViewModel;
+         mDreamViewModel = dreamViewModel;
+         mKeyguardInteractor = keyguardInteractor;
++        mLunarisBarViewBinder = lunarisBarViewBinder;
+ 
+         mFirstBypassAttempt = mKeyguardBypassController.getBypassEnabled();
+         if (!SceneContainerFlag.isEnabled()) {
+@@ -451,6 +456,7 @@ public class KeyguardStatusBarViewController extends ViewController<KeyguardStat
+     protected void onInit() {
+         super.onInit();
+         mCarrierTextController.init();
++        mLunarisBarViewBinder.bind(mView);
+     }
+ 
+     @Override
+diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/pipeline/shared/ui/binder/HomeStatusBarViewBinder.kt b/packages/SystemUI/src/com/android/systemui/statusbar/pipeline/shared/ui/binder/HomeStatusBarViewBinder.kt
+index 8ece7f069..5664b389a 100644
+--- a/packages/SystemUI/src/com/android/systemui/statusbar/pipeline/shared/ui/binder/HomeStatusBarViewBinder.kt
++++ b/packages/SystemUI/src/com/android/systemui/statusbar/pipeline/shared/ui/binder/HomeStatusBarViewBinder.kt
+@@ -61,7 +61,9 @@ interface HomeStatusBarViewBinder {
+ }
+ 
+ @PerDisplaySingleton
+-class HomeStatusBarViewBinderImpl @Inject constructor() : HomeStatusBarViewBinder {
++class HomeStatusBarViewBinderImpl @Inject constructor(
++    private val lunarisBarViewBinder: com.android.systemui.statusbar.featurepods.popups.ui.binder.LunarisBarViewBinder? = null,
++) : HomeStatusBarViewBinder {
+     override fun bind(
+         displayId: Int,
+         view: View,
+@@ -70,6 +72,8 @@ class HomeStatusBarViewBinderImpl @Inject constructor() : HomeStatusBarViewBinde
+         systemEventChipAnimateOut: ((View) -> Unit)?,
+         listener: StatusBarVisibilityChangeListener?,
+     ) {
++        (view as? android.view.ViewGroup)?.let { lunarisBarViewBinder?.bind(it, false) }
++
+         // Set some top-level views to gone before we get started
+         val systemInfoView = view.requireViewById<View>(R.id.status_bar_end_side_content)
+         val clockView = view.requireViewById<View>(R.id.clock)
+diff --git a/packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayController.java b/packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayController.java
+index 42b71d9c1..c11fac4ac 100644
+--- a/packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayController.java
++++ b/packages/SystemUI/src/com/android/systemui/theme/ThemeOverlayController.java
+@@ -199,7 +199,8 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
+         Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES,
+         Settings.Secure.QS_BRIGHTNESS_POSITION_BOTTOM,
+         Settings.Secure.QS_SHOW_AUTO_BRIGHTNESS_BUTTON,
+-        Settings.Secure.QS_SHOW_BRIGHTNESS
++        Settings.Secure.QS_SHOW_BRIGHTNESS,
++        Settings.Secure.BERRY_BLACK_THEME
+     ));
+ 
+     private final DeviceProvisionedListener mDeviceProvisionedListener =
+@@ -738,6 +739,27 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
+         assignColorsToOverlay(mDynamicOverlay, DynamicColors.getFixedColorsMapped());
+         // Custom Colors
+         assignColorsToOverlay(mDynamicOverlay, DynamicColors.getCustomColorsMapped());
++
++        if (mSecureSettings.getIntForUser(Settings.Secure.BERRY_BLACK_THEME, 0,
++                mUserTracker.getUserId()) == 1) {
++            // Lineage's black palette, extended to the current Material surface tokens.
++            for (String name : List.of("neutral1_900", "neutral2_900")) {
++                mNeutralOverlay.setResourceValue("android:color/system_" + name + "_dark",
++                        TYPE_INT_COLOR_ARGB8, Color.BLACK, null);
++            }
++            for (String name : List.of("background", "surface", "surface_dim",
++                    "surface_container_low", "surface_container_lowest")) {
++                mDynamicOverlay.setResourceValue("android:color/system_" + name + "_dark",
++                        TYPE_INT_COLOR_ARGB8, Color.BLACK, null);
++            }
++            for (String name : List.of("surface_bright", "surface_container", "surface_container_high",
++                    "surface_effect_1")) {
++                mDynamicOverlay.setResourceValue("android:color/system_" + name + "_dark",
++                        TYPE_INT_COLOR_ARGB8, 0xff171717, null);
++            }
++            mDynamicOverlay.setResourceValue("android:color/system_surface_container_highest_dark",
++                    TYPE_INT_COLOR_ARGB8, 0xff212121, null);
++        }
+     }
+ 
+     private void assignColorsToOverlay(FabricatedOverlay overlay,
+diff --git a/packages/SystemUI/tests/src/com/android/systemui/qs/panels/ui/compose/TileTest.kt b/packages/SystemUI/tests/src/com/android/systemui/qs/panels/ui/compose/TileTest.kt
+index f0b73743a..73f748eb3 100644
+--- a/packages/SystemUI/tests/src/com/android/systemui/qs/panels/ui/compose/TileTest.kt
++++ b/packages/SystemUI/tests/src/com/android/systemui/qs/panels/ui/compose/TileTest.kt
+@@ -16,17 +16,27 @@
+ 
+ package com.android.systemui.qs.panels.ui.compose
+ 
++import android.provider.Settings
+ import android.service.quicksettings.Tile.STATE_UNAVAILABLE
++import androidx.compose.foundation.layout.Box
++import androidx.compose.foundation.layout.height
++import androidx.compose.foundation.layout.width
+ import androidx.compose.runtime.Composable
+ import androidx.compose.runtime.rememberCoroutineScope
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.platform.testTag
++import androidx.compose.ui.test.assertHeightIsEqualTo
++import androidx.compose.ui.test.assertWidthIsEqualTo
+ import androidx.compose.ui.test.junit4.createComposeRule
+ import androidx.compose.ui.test.longClick
+ import androidx.compose.ui.test.onNodeWithContentDescription
+ import androidx.compose.ui.test.onNodeWithText
++import androidx.compose.ui.test.onNodeWithTag
+ import androidx.compose.ui.test.performClick
+ import androidx.compose.ui.test.performTouchInput
+ import androidx.test.ext.junit.runners.AndroidJUnit4
+ import androidx.test.filters.SmallTest
++import androidx.compose.ui.unit.dp
+ import com.android.compose.animation.scene.SceneTransitionLayout
+ import com.android.compose.animation.scene.TestScenes.SceneA
+ import com.android.compose.animation.scene.rememberMutableSceneTransitionLayoutState
+@@ -37,14 +47,18 @@ import com.android.systemui.haptics.msdl.tileHapticsViewModelFactory
+ import com.android.systemui.plugins.qs.QSTile
+ import com.android.systemui.qs.FakeQSTile
+ import com.android.systemui.qs.panels.ui.compose.infinitegrid.Tile
++import com.android.systemui.qs.panels.ui.compose.infinitegrid.CommonTileDefaults
+ import com.android.systemui.qs.panels.ui.viewmodel.BounceableTileViewModel
+ import com.android.systemui.qs.panels.ui.viewmodel.TileViewModel
+ import com.android.systemui.qs.pipeline.shared.TileSpec
+ import com.android.systemui.testKosmos
++import com.android.systemui.shared.settings.data.repository.FakeSystemSettingsRepository
++import com.android.systemui.res.R
+ import com.google.common.truth.Truth.assertThat
+ import org.junit.Rule
+ import org.junit.Test
+ import org.junit.runner.RunWith
++import kotlinx.coroutines.runBlocking
+ 
+ @SmallTest
+ @RunWith(AndroidJUnit4::class)
+@@ -52,32 +66,105 @@ class TileTest : SysuiTestCase() {
+     @get:Rule val composeRule = createComposeRule()
+     private val kosmos = testKosmos()
+     private val tileHapticsViewModelFactory = kosmos.tileHapticsViewModelFactory
++    private val settings = FakeSystemSettingsRepository()
+ 
+     @Composable
+-    private fun TestTile(tile: TileViewModel, iconOnly: Boolean) {
+-        PlatformTheme {
+-            SceneTransitionLayout(rememberMutableSceneTransitionLayoutState(SceneA)) {
+-                scene(SceneA) {
+-                    Tile(
+-                        tile = tile,
+-                        iconOnly = iconOnly,
+-                        squishiness = { 1f },
+-                        coroutineScope = rememberCoroutineScope(),
+-                        bounceableInfo =
+-                            BounceableInfo(
+-                                BounceableTileViewModel(),
+-                                previousTile = null,
+-                                nextTile = null,
+-                                bounceEnd = true,
+-                            ),
+-                        tileHapticsViewModelFactory = tileHapticsViewModelFactory,
+-                        detailsViewModel = null,
+-                    )
++    private fun TestTile(
++        tile: TileViewModel,
++        iconOnly: Boolean,
++        modifier: Modifier = Modifier,
++    ) {
++        CircularQsTileSettings(settings) {
++            PlatformTheme {
++                SceneTransitionLayout(rememberMutableSceneTransitionLayoutState(SceneA)) {
++                    scene(SceneA) {
++                        Tile(
++                            tile = tile,
++                            iconOnly = iconOnly,
++                            squishiness = { 1f },
++                            coroutineScope = rememberCoroutineScope(),
++                            bounceableInfo =
++                                BounceableInfo(
++                                    BounceableTileViewModel(),
++                                    previousTile = null,
++                                    nextTile = null,
++                                    bounceEnd = true,
++                                ),
++                            tileHapticsViewModelFactory = tileHapticsViewModelFactory,
++                            detailsViewModel = null,
++                            modifier = modifier,
++                        )
++                    }
+                 }
+             }
+         }
+     }
+ 
++    @Test
++    fun circularDisabled_sizeSettingDoesNotChangeDefaultDimensions() {
++        runBlocking { settings.setInt(Settings.System.QS_TILES_CIRCULAR_SIZE, 80) }
++        composeRule.setContent {
++            CircularQsTileSettings(settings) {
++                Box(Modifier.height(CommonTileDefaults.TileHeight).testTag("tile_height"))
++                Box(Modifier.height(CommonTileDefaults.ToggleTargetSize).testTag("toggle_size"))
++            }
++        }
++        val resources = context.resources
++        val density = resources.displayMetrics.density
++        composeRule.onNodeWithTag("tile_height").assertHeightIsEqualTo(
++            (resources.getDimension(R.dimen.common_tile_default_tile_height) / density).dp
++        )
++        composeRule.onNodeWithTag("toggle_size").assertHeightIsEqualTo(
++            (resources.getDimension(R.dimen.common_tile_default_toggle_target_size) / density).dp
++        )
++    }
++
++    @Test
++    fun circularIconTile_clickAndDisablePreserveActions() {
++        val tile = InteractableFakeQSTile()
++        tile.fakeTile.changeState(QSTile.State().apply { contentDescription = "circularTile" })
++        val viewModel = TileViewModel(tile.fakeTile, TileSpec.create("test"), Expandable())
++        runBlocking {
++            settings.setInt(Settings.System.QS_TILES_CIRCULAR, 1)
++            settings.setInt(Settings.System.QS_TILES_CIRCULAR_SIZE, 100)
++        }
++        composeRule.setContent {
++            TestTile(viewModel, iconOnly = true, modifier = Modifier.width(100.dp))
++        }
++        composeRule.onNodeWithContentDescription("circularTile").performClick()
++        assertThat(tile.interactions).containsExactly(InteractableFakeQSTile.Interaction.CLICK)
++
++        runBlocking { settings.setInt(Settings.System.QS_TILES_CIRCULAR, 0) }
++        composeRule.waitForIdle()
++        composeRule.onNodeWithContentDescription("circularTile").assertWidthIsEqualTo(100.dp)
++            .performClick()
++        assertThat(tile.interactions).containsExactly(
++            InteractableFakeQSTile.Interaction.CLICK,
++            InteractableFakeQSTile.Interaction.CLICK,
++        )
++    }
++
++    @Test
++    fun circularDualTargetTile_clickTogglesAndLongClickOpensDetails() {
++        val tile = InteractableFakeQSTile()
++        tile.fakeTile.changeState(
++            QSTile.State().apply {
++                contentDescription = "circularDualTargetTile"
++                handlesSecondaryClick = true
++            }
++        )
++        val viewModel = TileViewModel(tile.fakeTile, TileSpec.create("test"), Expandable())
++        runBlocking { settings.setInt(Settings.System.QS_TILES_CIRCULAR, 1) }
++        composeRule.setContent { TestTile(viewModel, iconOnly = true) }
++        composeRule.onNodeWithContentDescription("circularDualTargetTile").performClick()
++        composeRule.onNodeWithContentDescription("circularDualTargetTile")
++            .performTouchInput { longClick() }
++        assertThat(tile.interactions).containsExactly(
++            InteractableFakeQSTile.Interaction.SECONDARY_CLICK,
++            InteractableFakeQSTile.Interaction.CLICK,
++        ).inOrder()
++    }
++
+     @Test
+     fun click_largeTile_shouldReceiveClick() {
+         val tile = InteractableFakeQSTile()
+diff --git a/packages/SystemUI/tests/utils/src/com/android/systemui/brightness/ui/viewmodel/BrightnessSliderViewModelKosmos.kt b/packages/SystemUI/tests/utils/src/com/android/systemui/brightness/ui/viewmodel/BrightnessSliderViewModelKosmos.kt
+index 9d79ccc50..3cf06ece8 100644
+--- a/packages/SystemUI/tests/utils/src/com/android/systemui/brightness/ui/viewmodel/BrightnessSliderViewModelKosmos.kt
++++ b/packages/SystemUI/tests/utils/src/com/android/systemui/brightness/ui/viewmodel/BrightnessSliderViewModelKosmos.kt
+@@ -22,6 +22,7 @@ import com.android.systemui.brightness.domain.interactor.screenBrightnessInterac
+ import com.android.systemui.classifier.domain.interactor.falsingInteractor
+ import com.android.systemui.graphics.imageLoader
+ import com.android.systemui.haptics.slider.sliderHapticsViewModelFactory
++import com.android.systemui.shared.settings.data.repository.systemSettingsRepository
+ import com.android.systemui.kosmos.Kosmos
+ import com.android.systemui.settings.brightness.ui.brightnessWarningToast
+ 
+@@ -38,6 +39,7 @@ val Kosmos.brightnessSliderViewModelFactory: BrightnessSliderViewModel.Factory b
+                     falsingInteractor = falsingInteractor,
+                     brightnessWarningToast = brightnessWarningToast,
+                     imageLoader = imageLoader,
++                    systemSettingsRepository = systemSettingsRepository,
+                 )
+             }
+         }
+diff --git a/packages/SystemUI/tests/utils/src/com/android/systemui/qs/panels/ui/viewmodel/EditModeViewModelKosmos.kt b/packages/SystemUI/tests/utils/src/com/android/systemui/qs/panels/ui/viewmodel/EditModeViewModelKosmos.kt
+index 71408f6ad..07885534f 100644
+--- a/packages/SystemUI/tests/utils/src/com/android/systemui/qs/panels/ui/viewmodel/EditModeViewModelKosmos.kt
++++ b/packages/SystemUI/tests/utils/src/com/android/systemui/qs/panels/ui/viewmodel/EditModeViewModelKosmos.kt
+@@ -29,6 +29,7 @@ import com.android.systemui.qs.panels.domain.interactor.tilesAvailabilityInterac
+ import com.android.systemui.qs.panels.ui.compose.infinitegrid.infiniteGridLayout
+ import com.android.systemui.qs.pipeline.domain.interactor.currentTilesInteractor
+ import com.android.systemui.qs.pipeline.domain.interactor.minimumTilesInteractor
++import com.android.systemui.util.settings.data.repository.userAwareSystemSettingsRepository
+ 
+ val Kosmos.editModeViewModel by
+     Kosmos.Fixture {
+@@ -45,5 +46,6 @@ val Kosmos.editModeViewModel by
+             testDispatcher,
+             gridLayoutTypeInteractor,
+             gridLayoutMap,
++            userAwareSystemSettingsRepository,
+         )
+     }
+diff --git a/packages/SystemUI/tests/utils/src/com/android/systemui/qs/panels/ui/viewmodel/QuickQuickSettingsViewModelKosmos.kt b/packages/SystemUI/tests/utils/src/com/android/systemui/qs/panels/ui/viewmodel/QuickQuickSettingsViewModelKosmos.kt
+index 365dc8c05..456f5137d 100644
+--- a/packages/SystemUI/tests/utils/src/com/android/systemui/qs/panels/ui/viewmodel/QuickQuickSettingsViewModelKosmos.kt
++++ b/packages/SystemUI/tests/utils/src/com/android/systemui/qs/panels/ui/viewmodel/QuickQuickSettingsViewModelKosmos.kt
+@@ -20,6 +20,7 @@ import com.android.systemui.haptics.msdl.tileHapticsViewModelFactory
+ import com.android.systemui.kosmos.Kosmos
+ import com.android.systemui.qs.panels.domain.interactor.quickQuickSettingsRowInteractor
+ import com.android.systemui.qs.pipeline.domain.interactor.currentTilesInteractor
++import com.android.systemui.util.settings.data.repository.userAwareSystemSettingsRepository
+ 
+ val Kosmos.quickQuickSettingsViewModelFactory by
+     Kosmos.Fixture {
+@@ -33,6 +34,7 @@ val Kosmos.quickQuickSettingsViewModelFactory by
+                     tileSquishinessViewModel,
+                     iconTilesViewModel,
+                     tileHapticsViewModelFactory,
++                    userAwareSystemSettingsRepository,
+                 )
+             }
+         }
+diff --git a/packages/SystemUI/tests/utils/src/com/android/systemui/qs/panels/ui/viewmodel/TileGridViewModelKosmos.kt b/packages/SystemUI/tests/utils/src/com/android/systemui/qs/panels/ui/viewmodel/TileGridViewModelKosmos.kt
+index ac370c583..b3304110b 100644
+--- a/packages/SystemUI/tests/utils/src/com/android/systemui/qs/panels/ui/viewmodel/TileGridViewModelKosmos.kt
++++ b/packages/SystemUI/tests/utils/src/com/android/systemui/qs/panels/ui/viewmodel/TileGridViewModelKosmos.kt
+@@ -21,6 +21,7 @@ import com.android.systemui.qs.panels.domain.interactor.gridLayoutMap
+ import com.android.systemui.qs.panels.domain.interactor.gridLayoutTypeInteractor
+ import com.android.systemui.qs.panels.ui.compose.infinitegrid.infiniteGridLayout
+ import com.android.systemui.qs.pipeline.domain.interactor.currentTilesInteractor
++import com.android.systemui.util.settings.data.repository.userAwareSystemSettingsRepository
+ 
+ val Kosmos.tileGridViewModel by Kosmos.Fixture { tileGridViewModelFactory.create() }
+ 
+@@ -33,6 +34,7 @@ val Kosmos.tileGridViewModelFactory by
+                     gridLayoutMap,
+                     currentTilesInteractor,
+                     infiniteGridLayout,
++                    userAwareSystemSettingsRepository,
+                 )
+             }
+         }
