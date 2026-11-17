@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-FileCopyrightText: 2026 Paranoid Android
+     SPDX-License-Identifier: Apache-2.0 -->
+<resources>
+    <string name="qs_tiles_circular_title">Circular Quick Settings tiles</string>
+    <string name="qs_tiles_circular_summary">Use circles for icon tiles and pill shapes for wide tiles</string>
+    <string name="qs_tiles_circular_settings_summary">Choose tile shape and size</string>
+    <string name="qs_tiles_circular_switch_title">Use circular tiles</string>
+    <string name="qs_tiles_circular_size_title">Tile size</string>
+    <string name="qs_tiles_circular_size_summary">Scale tiles and their icon backgrounds together</string>
+</resources>
