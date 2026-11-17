@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2026 Yet Another AOSP Project
+     SPDX-License-Identifier: Apache-2.0 -->
+<resources>
+    <string name="refresh_rate_selector_title">Maximum refresh rate</string>
+    <string name="refresh_rate_selector_auto">Auto (display default)</string>
+    <string name="refresh_rate_selector_hz">%1$s Hz</string>
+    <string name="refresh_rate_selector_current">Current limit: %1$s Hz</string>
+</resources>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2026 Yet Another AOSP Project
+     SPDX-License-Identifier: Apache-2.0 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="12dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/lunaris_bar_preview"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:accessibilityHeading="true" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/lunaris_bar_preview_sample"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+    <com.android.settings.system.LunarisBarPreviewView
+        android:id="@+id/lunaris_bar_preview_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="@string/lunaris_bar_preview_hint" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/lunaris_bar_preview_hint"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+</LinearLayout>

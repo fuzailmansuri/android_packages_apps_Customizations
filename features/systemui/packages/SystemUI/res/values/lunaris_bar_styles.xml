@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2024-2026 Lunaris AOSP
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <style name="LunarisBarMediaProgressBar" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:thumb">@drawable/lunaris_bar_media_seekbar_thumb</item>
+        <item name="android:thumbTint">@color/media_on_background</item>
+        <item name="android:progressDrawable">@drawable/media_squiggly_progress</item>
+        <item name="android:progressTint">@color/media_on_background</item>
+        <item name="android:progressBackgroundTint">@android:color/system_primary_dark</item>
+        <item name="android:splitTrack">false</item>
+    </style>
+</resources>

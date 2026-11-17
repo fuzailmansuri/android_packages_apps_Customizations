@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2026 Yet Another AOSP Project
+     SPDX-License-Identifier: Apache-2.0 -->
+<resources>
+    <string name="lunaris_bar_preview_sample">Sample content</string>
+    <string name="lunaris_bar_preview_compact">Compact preview</string>
+    <string name="lunaris_bar_preview_expanded">Expanded preview</string>
+</resources>
