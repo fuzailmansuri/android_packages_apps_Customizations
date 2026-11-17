@@ -1,0 +1,80 @@
+package com.android.launcher3.settings;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceGroup;
+import androidx.preference.SwitchPreferenceCompat;
+
+import com.android.launcher3.LauncherPrefs;
+import com.android.launcher3.R;
+import com.android.launcher3.smartspace.SmartspaceEvent;
+
+/** Launcher provider-event filters within Miscellaneous. */
+final class SmartspaceSettings implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private final PreferenceFragmentCompat mFragment;
+    private final PreferenceGroup mEvents;
+
+    SmartspaceSettings(PreferenceFragmentCompat fragment) {
+        mFragment = fragment;
+        mEvents = fragment.findPreference("smartspace_events");
+        if (mEvents == null) return;
+        SwitchPreferenceCompat enabled = new SwitchPreferenceCompat(context());
+        enabled.setKey(LauncherPrefs.SHOW_SMARTSPACE.getSharedPrefKey());
+        enabled.setTitle(R.string.show_smartspace_title);
+        enabled.setSummary(R.string.show_smartspace_summary);
+        enabled.setDefaultValue(false);
+        enabled.setPersistent(true);
+        enabled.setIconSpaceReserved(false);
+        enabled.setOrder(-2);
+        mEvents.addPreference(enabled);
+        Preference info = new Preference(context());
+        info.setKey("smartspace_events_info");
+        info.setSummary(R.string.smartspace_events_summary);
+        info.setSelectable(false);
+        info.setIconSpaceReserved(false);
+        info.setOrder(-1);
+        mEvents.addPreference(info);
+        for (SmartspaceEvent event : SmartspaceEvent.values()) {
+            SwitchPreferenceCompat preference = new SwitchPreferenceCompat(context());
+            preference.setKey(event.preference.getSharedPrefKey());
+            preference.setTitle(event.title);
+            preference.setDefaultValue(true);
+            preference.setPersistent(true);
+            preference.setIconSpaceReserved(false);
+            preference.setOrder(event.ordinal());
+            mEvents.addPreference(preference);
+        }
+        refresh();
+    }
+
+    private Context context() {
+        return mFragment.getPreferenceManager().getContext();
+    }
+
+    void refresh() {
+        if (mEvents == null) return;
+        boolean enabled = LauncherPrefs.SHOW_SMARTSPACE.get(context());
+        for (SmartspaceEvent event : SmartspaceEvent.values()) {
+            mEvents.findPreference(event.preference.getSharedPrefKey()).setEnabled(enabled);
+        }
+        mEvents.setSummary(enabled
+                ? R.string.smartspace_events_summary : R.string.smartspace_events_disabled_summary);
+    }
+
+    void start() {
+        LauncherPrefs.getPrefs(context()).registerOnSharedPreferenceChangeListener(this);
+        refresh();
+    }
+
+    void stop() {
+        LauncherPrefs.getPrefs(context()).unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+        if (key == null || LauncherPrefs.SHOW_SMARTSPACE.getSharedPrefKey().equals(key)) refresh();
+    }
+}
